@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Assistant from './components/Assistant';
+import AdminDashboard from './components/AdminDashboard';
 import { NavigationItem, ResearchArea, NoticeItem, TechDoc } from './types';
 import { ArrowRight, Box, Brain, Cpu, FileText, Factory, ChevronRight, Activity, Users, Zap, Search } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -35,14 +36,14 @@ const researchAreas: ResearchArea[] = [
   }
 ];
 
-const notices: NoticeItem[] = [
+const initialNotices: NoticeItem[] = [
   { id: 1, category: '공지', title: '2024년도 하반기 스마트제조 실증 지원사업 모집 공고', date: '2024-05-20', content: '...' },
   { id: 2, category: '행사', title: '제5회 안산 스마트제조 포럼 개최 안내', date: '2024-05-15', content: '...' },
   { id: 3, category: '보도', title: '[보도] SMIC, 독일 프라운호퍼 연구소와 MOU 체결', date: '2024-05-10', content: '...' },
   { id: 4, category: '공지', title: '데모공장 견학 프로그램 운영 재개 안내', date: '2024-05-01', content: '...' },
 ];
 
-const documents: TechDoc[] = [
+const initialDocuments: TechDoc[] = [
   { id: 'doc-1', title: '제조 데이터 표준화 가이드라인 v2.0', type: 'PDF', date: '2024.04.15', summary: 'AAS 기반의 제조 데이터 교환 표준 정의서' },
   { id: 'doc-2', title: 'Physical AI 로봇 제어 API Reference', type: 'API', date: '2024.03.10', summary: '협동로봇 제어를 위한 RESTful API 명세' },
   { id: 'doc-3', title: '5G 특화망 기반 스마트공장 구축 백서', type: 'Whitepaper', date: '2024.02.20', summary: '이음 5G 도입 사례 및 성능 분석 리포트' },
@@ -61,8 +62,13 @@ const chartData = [
 
 const HeroSection = ({ setTab }: { setTab: (t: NavigationItem) => void }) => (
   <div className="relative bg-slate-900 overflow-hidden">
-    <div className="absolute inset-0 opacity-40">
-      <img src="https://picsum.photos/1920/1080?grayscale&blur=2" className="w-full h-full object-cover" alt="Factory Background" />
+    {/* Dynamic Background Image */}
+    <div className="absolute inset-0 opacity-40 overflow-hidden">
+      <img 
+        src="https://picsum.photos/1920/1080?grayscale&blur=2" 
+        className="w-full h-full object-cover animate-kenburns origin-center" 
+        alt="Factory Background" 
+      />
     </div>
     <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-48">
@@ -241,7 +247,7 @@ const ResearchSection = () => (
   </div>
 );
 
-const DocsSection = () => (
+const DocsSection = ({ documents }: { documents: TechDoc[] }) => (
   <div className="py-20 bg-slate-50 min-h-screen">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
@@ -304,7 +310,7 @@ const DocsSection = () => (
   </div>
 );
 
-const NoticesSection = () => (
+const NoticesSection = ({ notices }: { notices: NoticeItem[] }) => (
   <div className="py-20 bg-white min-h-screen">
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-12">
@@ -356,6 +362,8 @@ const NoticesSection = () => (
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<NavigationItem>('HOME');
+  const [notices, setNotices] = useState<NoticeItem[]>(initialNotices);
+  const [documents, setDocuments] = useState<TechDoc[]>(initialDocuments);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -385,9 +393,19 @@ const App: React.FC = () => {
       case 'RESEARCH':
         return <ResearchSection />;
       case 'DOCS':
-        return <DocsSection />;
+        return <DocsSection documents={documents} />;
       case 'NOTICES':
-        return <NoticesSection />;
+        return <NoticesSection notices={notices} />;
+      case 'ADMIN':
+        return (
+          <AdminDashboard 
+            notices={notices} 
+            setNotices={setNotices} 
+            documents={documents}
+            setDocuments={setDocuments}
+            onLogout={() => setActiveTab('HOME')} 
+          />
+        );
       default:
         return <HeroSection setTab={setActiveTab} />;
     }
@@ -395,12 +413,16 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      {activeTab !== 'ADMIN' && <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />}
       <main className="flex-grow">
         {renderContent()}
       </main>
-      <Footer />
-      <Assistant />
+      {activeTab !== 'ADMIN' && (
+        <>
+          <Footer onAdminClick={() => { setActiveTab('ADMIN'); window.scrollTo(0, 0); }} />
+          <Assistant />
+        </>
+      )}
     </div>
   );
 };

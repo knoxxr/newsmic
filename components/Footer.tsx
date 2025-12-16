@@ -1,7 +1,11 @@
 import React from 'react';
-import { MapPin, Phone, Mail, Github, Linkedin } from 'lucide-react';
+import { MapPin, Phone, Mail, Github, Linkedin, Lock } from 'lucide-react';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  onAdminClick?: () => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onAdminClick }) => {
   return (
     <footer className="bg-slate-900 text-slate-300 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,6 +48,16 @@ const Footer: React.FC = () => {
               <li><a href="#" className="hover:text-brand-400 transition-colors">한국산업단지공단</a></li>
               <li><a href="#" className="hover:text-brand-400 transition-colors">경기테크노파크</a></li>
               <li><a href="#" className="hover:text-brand-400 transition-colors">한양대학교 ERICA</a></li>
+              {onAdminClick && (
+                <li className="pt-4">
+                  <button 
+                    onClick={onAdminClick} 
+                    className="flex items-center text-xs text-slate-600 hover:text-brand-400 transition-colors"
+                  >
+                    <Lock className="w-3 h-3 mr-1" /> 관리자 접속
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

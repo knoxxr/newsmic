@@ -1,4 +1,4 @@
-export type NavigationItem = 'HOME' | 'ABOUT' | 'RESEARCH' | 'DOCS' | 'NOTICES' | 'CONTACT';
+export type NavigationItem = 'HOME' | 'ABOUT' | 'RESEARCH' | 'DOCS' | 'NOTICES' | 'CONTACT' | 'ADMIN';
 
 export interface ResearchArea {
   id: string;

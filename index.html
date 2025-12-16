@@ -39,6 +39,23 @@
           -ms-overflow-style: none;
           scrollbar-width: none;
       }
+      
+      /* Ken Burns Effect for Hero Background */
+      @keyframes kenburns {
+        0% {
+          transform: scale(1) translate(0, 0);
+        }
+        50% {
+          transform: scale(1.1) translate(-1%, -1%);
+        }
+        100% {
+          transform: scale(1) translate(0, 0);
+        }
+      }
+      
+      .animate-kenburns {
+        animation: kenburns 30s ease-in-out infinite;
+      }
     </style>
   <script type="importmap">
 {
