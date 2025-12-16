@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Assistant from './components/Assistant';
@@ -109,20 +109,26 @@ const aboutImages = [
 
 // --- Sub-Components for Pages ---
 
-const HeroSection = ({ setTab, language }: { setTab: (t: NavigationItem) => void, language: Language }) => (
-  <div className="relative bg-slate-900 overflow-hidden">
-    {/* Dynamic Background Image */}
-    <div className="absolute inset-0 opacity-60 overflow-hidden">
-      <img 
-        src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop" 
-        className="w-full h-full object-cover animate-float-zoom origin-center" 
-        alt="Future Manufacturing Background" 
-      />
+const HeroSection = ({ scrollToSection, language }: { scrollToSection: (id: string) => void, language: Language }) => (
+  <div className="relative bg-slate-900 overflow-hidden min-h-[85vh] flex items-center">
+    {/* Dynamic Video Background */}
+    <div className="absolute inset-0 overflow-hidden">
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        className="w-full h-full object-cover opacity-60"
+        poster="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070"
+      >
+        <source src="https://videos.pexels.com/video-files/3191854/3191854-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </div>
-    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-slate-900/30"></div>
-    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-48">
+    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900/40"></div>
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
       <div className="md:w-2/3">
-        <div className="inline-flex items-center rounded-full bg-brand-500/20 px-3 py-1 text-sm font-semibold text-brand-300 ring-1 ring-inset ring-brand-500/40 mb-6 backdrop-blur-sm">
+        <div className="inline-flex items-center rounded-full bg-brand-500/20 px-3 py-1 text-sm font-semibold text-brand-300 ring-1 ring-inset ring-brand-500/40 mb-6 backdrop-blur-sm animate-fade-in-up">
           <span className="flex h-2 w-2 rounded-full bg-brand-400 mr-2 animate-pulse"></span>
           Future of Manufacturing
         </div>
@@ -146,10 +152,10 @@ const HeroSection = ({ setTab, language }: { setTab: (t: NavigationItem) => void
           }
         </p>
         <div className="mt-10 flex gap-4">
-          <button onClick={() => setTab('RESEARCH')} className="bg-brand-600 hover:bg-brand-500 text-white px-8 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-brand-900/30 flex items-center transform hover:-translate-y-1">
+          <button onClick={() => scrollToSection('RESEARCH')} className="bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-lg font-semibold transition-all shadow-lg shadow-brand-900/30 flex items-center transform hover:-translate-y-1">
             {language === 'KO' ? '핵심 기술 보기' : 'Core Tech'} <ArrowRight className="ml-2 w-5 h-5" />
           </button>
-          <button onClick={() => setTab('ABOUT')} className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-8 py-3 rounded-lg font-semibold transition-all border border-white/20 hover:border-white/40 shadow-lg">
+          <button onClick={() => scrollToSection('ABOUT')} className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-8 py-4 rounded-lg font-semibold transition-all border border-white/20 hover:border-white/40 shadow-lg">
             {language === 'KO' ? '센터 소개' : 'About Center'}
           </button>
         </div>
@@ -244,8 +250,8 @@ const AboutSection = ({ language }: { language: Language }) => {
                 <h3 className="text-lg font-medium text-slate-900">{language === 'KO' ? '미션 (Mission)' : 'Mission'}</h3>
                 <p className="mt-2 text-slate-600">
                   {language === 'KO' 
-                    ? '제조 데이터와 AI 기술의 융합을 통해 국내 중소/중견 기업의 제조 경쟁력을 글로벌 수준으로 향상시킵니다.'
-                    : 'Enhancing the manufacturing competitiveness of SMEs to a global level through the convergence of manufacturing data and AI technology.'
+                    ? '미래 제조업 경쟁력 향상을 위해 인공지능과 피지컬 AI를 중심으로 핵심 요소기술을 연구하고, 이를 산업 현장에 보급합니다.'
+                    : 'Researching core elementary technologies centered on AI and Physical AI to improve future manufacturing competitiveness.'
                   }
                 </p>
               </div>
@@ -378,133 +384,216 @@ const ResearchSection = ({ language }: { language: Language }) => (
   </div>
 );
 
-const DocsSection = ({ documents, onDocClick, language }: { documents: TechDoc[], onDocClick: (doc: TechDoc) => void, language: Language }) => (
-  <div className="py-20 bg-slate-50 min-h-screen">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
-        <div>
-          <h2 className="text-3xl font-bold text-slate-900">{language === 'KO' ? '기술 문서 및 자료' : 'Technical Documents'}</h2>
-          <p className="text-slate-600 mt-2">{language === 'KO' ? '연구 결과물, API 명세서, 백서를 열람할 수 있습니다.' : 'Access research results, API specifications, and whitepapers.'}</p>
-        </div>
-        <div className="mt-4 md:mt-0 relative">
-          <input 
-            type="text" 
-            placeholder={language === 'KO' ? "문서 검색..." : "Search docs..."}
-            className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none w-full md:w-64"
-          />
-          <Search className="absolute left-3 top-2.5 text-slate-400 w-4 h-4" />
-        </div>
-      </div>
+const DocsSection = ({ documents, onDocClick, language }: { documents: TechDoc[], onDocClick: (doc: TechDoc) => void, language: Language }) => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-      <div className="space-y-4">
-        {documents.map((doc) => (
-          <div 
-            key={doc.id} 
-            onClick={() => onDocClick(doc)}
-            className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between group cursor-pointer"
-          >
-            <div className="flex items-start">
-              <div className={`p-3 rounded-lg mr-4 ${
-                doc.type === 'PDF' ? 'bg-red-50 text-red-600' : 
-                doc.type === 'API' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600'
-              }`}>
-                {doc.type === 'API' ? <Box className="w-6 h-6" /> : <FileText className="w-6 h-6" />}
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                   <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${
-                      doc.type === 'PDF' ? 'bg-red-100 text-red-700' : 
-                      doc.type === 'API' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
-                   }`}>{doc.type}</span>
-                   <span className="text-slate-400 text-xs">{doc.date}</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">{doc.title}</h3>
-                <p className="text-sm text-slate-500 mt-1 line-clamp-2">{doc.summary}</p>
-              </div>
-            </div>
-            <div className="mt-4 md:mt-0 pl-16 md:pl-0">
-              <button className="text-sm font-semibold text-slate-500 hover:text-brand-600 flex items-center transition-colors">
-                {language === 'KO' ? '상세보기' : 'Details'} <ChevronRight className="w-4 h-4 ml-1" />
-              </button>
-            </div>
+  const filteredDocs = documents.filter(doc => 
+    doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    doc.summary.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="py-20 bg-slate-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900">{language === 'KO' ? '기술 문서 및 자료' : 'Technical Documents'}</h2>
+            <p className="text-slate-600 mt-2">{language === 'KO' ? '연구 결과물, API 명세서, 백서를 열람할 수 있습니다.' : 'Access research results, API specifications, and whitepapers.'}</p>
           </div>
-        ))}
-      </div>
-      
-      {/* Banner for API Access */}
-      <div className="mt-12 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between">
-         <div className="mb-6 md:mb-0">
-            <h3 className="text-xl font-bold mb-2">{language === 'KO' ? '연구용 데이터셋 & API 접근 권한이 필요하신가요?' : 'Need access to Research Datasets & APIs?'}</h3>
-            <p className="text-slate-300">{language === 'KO' ? '파트너십 기업 및 연구기관에게 데모공장 실시간 데이터를 제공합니다.' : 'We provide real-time demo factory data to partner companies and research institutes.'}</p>
-         </div>
-         <button className="bg-brand-600 hover:bg-brand-500 px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">
-           {language === 'KO' ? '파트너십 문의하기' : 'Contact Partnership'}
-         </button>
+          <div className="mt-4 md:mt-0 relative">
+            <input 
+              type="text" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={language === 'KO' ? "문서 검색..." : "Search docs..."}
+              className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none w-full md:w-64"
+            />
+            <Search className="absolute left-3 top-2.5 text-slate-400 w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {filteredDocs.length > 0 ? (
+            filteredDocs.map((doc) => (
+              <div 
+                key={doc.id} 
+                onClick={() => onDocClick(doc)}
+                className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between group cursor-pointer"
+              >
+                <div className="flex items-start">
+                  <div className={`p-3 rounded-lg mr-4 ${
+                    doc.type === 'PDF' ? 'bg-red-50 text-red-600' : 
+                    doc.type === 'API' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600'
+                  }`}>
+                    {doc.type === 'API' ? <Box className="w-6 h-6" /> : <FileText className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${
+                          doc.type === 'PDF' ? 'bg-red-100 text-red-700' : 
+                          doc.type === 'API' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                      }`}>{doc.type}</span>
+                      <span className="text-slate-400 text-xs">{doc.date}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">{doc.title}</h3>
+                    <p className="text-sm text-slate-500 mt-1 line-clamp-2">{doc.summary}</p>
+                  </div>
+                </div>
+                <div className="mt-4 md:mt-0 pl-16 md:pl-0">
+                  <button className="text-sm font-semibold text-slate-500 hover:text-brand-600 flex items-center transition-colors">
+                    {language === 'KO' ? '상세보기' : 'Details'} <ChevronRight className="w-4 h-4 ml-1" />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-10 text-slate-500">
+              {language === 'KO' ? '검색 결과가 없습니다.' : 'No documents found.'}
+            </div>
+          )}
+        </div>
+        
+        {/* Banner for API Access */}
+        <div className="mt-12 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between">
+          <div className="mb-6 md:mb-0">
+              <h3 className="text-xl font-bold mb-2">{language === 'KO' ? '연구용 데이터셋 & API 접근 권한이 필요하신가요?' : 'Need access to Research Datasets & APIs?'}</h3>
+              <p className="text-slate-300">{language === 'KO' ? '파트너십 기업 및 연구기관에게 데모공장 실시간 데이터를 제공합니다.' : 'We provide real-time demo factory data to partner companies and research institutes.'}</p>
+          </div>
+          <button className="bg-brand-600 hover:bg-brand-500 px-6 py-3 rounded-lg font-bold transition-colors whitespace-nowrap">
+            {language === 'KO' ? '파트너십 문의하기' : 'Contact Partnership'}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-const NoticesSection = ({ notices, onNoticeClick, language }: { notices: NoticeItem[], onNoticeClick: (notice: NoticeItem) => void, language: Language }) => (
-  <div className="py-20 bg-white min-h-screen">
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-slate-900">{language === 'KO' ? '공지사항 & 홍보' : 'Notices & PR'}</h2>
-        <p className="text-slate-600 mt-2">{language === 'KO' ? 'SMIC의 새로운 소식과 행사를 알려드립니다.' : 'Latest news and events from SMIC.'}</p>
-      </div>
+const NoticesSection = ({ notices, onNoticeClick, language }: { notices: NoticeItem[], onNoticeClick: (notice: NoticeItem) => void, language: Language }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden">
-        {notices.map((notice, index) => (
-          <div 
-            key={notice.id} 
-            onClick={() => onNoticeClick(notice)}
-            className={`p-6 hover:bg-slate-50 transition-colors cursor-pointer group ${index !== notices.length - 1 ? 'border-b border-slate-100' : ''}`}
-          >
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Thumbnail if available */}
-              {notice.imageUrl && (
-                 <div className="sm:w-32 sm:h-24 w-full h-48 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
-                    <img src={notice.imageUrl} alt={notice.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                 </div>
-              )}
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="flex items-center gap-2 mb-2">
-                   <span className={`text-xs font-bold px-2 py-1 rounded ${
-                     (notice.category === '공지' || notice.category === 'Notice') ? 'bg-slate-100 text-slate-700' :
-                     (notice.category === '행사' || notice.category === 'Event') ? 'bg-orange-100 text-orange-700' :
-                     'bg-brand-100 text-brand-700'
-                   }`}>
-                     {notice.category}
-                   </span>
-                   <span className="text-xs text-slate-400">{notice.date}</span>
-                </div>
-                <h3 className="text-lg font-medium text-slate-900 group-hover:text-brand-600 transition-colors">{notice.title}</h3>
-                <p className="text-sm text-slate-500 mt-1 line-clamp-2">{notice.content}</p>
-              </div>
-              <div className="flex items-center justify-end sm:w-10">
-                 <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-brand-500 transition-colors" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+  const categories = language === 'KO' 
+    ? ['ALL', '공지', '행사', '보도']
+    : ['ALL', 'Notice', 'Event', 'Press'];
 
-      {/* Gallery Grid */}
-      <div className="mt-16">
-        <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
-          <Activity className="w-5 h-5 mr-2 text-brand-500" /> {language === 'KO' ? '활동 갤러리' : 'Activity Gallery'}
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-           {[1, 2, 3, 4].map((i) => (
-             <div key={i} className="aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group">
-               <img src={`https://picsum.photos/400/400?random=${i + 20}`} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-             </div>
+  const filteredNotices = notices.filter(notice => {
+    const matchesSearch = notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          notice.content.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Check for category match. 
+    // Since mock data has different strings for KO/EN, we map the 'ALL' selection to wildcard,
+    // and rely on strict equality for specific categories.
+    // However, the 'categories' array is localized strings.
+    // If language is KO, buttons are ['전체', '공지', '행사', '보도']. 
+    // Notice.category is '공지', '행사', '보도'.
+    // If language is EN, buttons are ['All', 'Notice', 'Event', 'Press'].
+    // Notice.category is 'Notice', 'Event', 'Press'.
+    
+    let matchesCategory = true;
+    if (selectedCategory !== 'ALL' && selectedCategory !== '전체') {
+       matchesCategory = notice.category === selectedCategory;
+    }
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  return (
+    <div className="py-20 bg-white min-h-screen">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-slate-900">{language === 'KO' ? '공지사항 & 홍보' : 'Notices & PR'}</h2>
+          <p className="text-slate-600 mt-2">{language === 'KO' ? 'SMIC의 새로운 소식과 행사를 알려드립니다.' : 'Latest news and events from SMIC.'}</p>
+        </div>
+
+        {/* Category Filters */}
+        <div className="flex flex-wrap justify-center gap-2 mb-6">
+           {categories.map((cat) => (
+             <button
+               key={cat}
+               onClick={() => setSelectedCategory(cat)}
+               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+                 selectedCategory === cat
+                   ? 'bg-brand-600 text-white border-brand-600 shadow-md transform scale-105'
+                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+               }`}
+             >
+               {cat === 'ALL' ? (language === 'KO' ? '전체' : 'All') : cat}
+             </button>
            ))}
         </div>
+
+        {/* Search Input */}
+        <div className="mb-8 relative max-w-md mx-auto">
+          <input 
+            type="text" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={language === 'KO' ? "공지사항 검색..." : "Search notices..."}
+            className="pl-10 pr-4 py-3 border border-slate-300 rounded-full focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none w-full shadow-sm"
+          />
+          <Search className="absolute left-3.5 top-3.5 text-slate-400 w-5 h-5" />
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden min-h-[300px]">
+          {filteredNotices.length > 0 ? (
+            filteredNotices.map((notice, index) => (
+              <div 
+                key={notice.id} 
+                onClick={() => onNoticeClick(notice)}
+                className={`p-6 hover:bg-slate-50 transition-colors cursor-pointer group ${index !== filteredNotices.length - 1 ? 'border-b border-slate-100' : ''}`}
+              >
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Thumbnail if available */}
+                  {notice.imageUrl && (
+                     <div className="sm:w-32 sm:h-24 w-full h-48 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
+                        <img src={notice.imageUrl} alt={notice.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                     </div>
+                  )}
+                  <div className="flex-1 flex flex-col justify-center">
+                    <div className="flex items-center gap-2 mb-2">
+                       <span className={`text-xs font-bold px-2 py-1 rounded ${
+                         (notice.category === '공지' || notice.category === 'Notice') ? 'bg-slate-100 text-slate-700' :
+                         (notice.category === '행사' || notice.category === 'Event') ? 'bg-orange-100 text-orange-700' :
+                         'bg-brand-100 text-brand-700'
+                       }`}>
+                         {notice.category}
+                       </span>
+                       <span className="text-xs text-slate-400">{notice.date}</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-slate-900 group-hover:text-brand-600 transition-colors">{notice.title}</h3>
+                    <p className="text-sm text-slate-500 mt-1 line-clamp-2">{notice.content}</p>
+                  </div>
+                  <div className="flex items-center justify-end sm:w-10">
+                     <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-brand-500 transition-colors" />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64 text-slate-500">
+               <Search className="w-12 h-12 text-slate-300 mb-4" />
+               <p>{language === 'KO' ? '검색 결과가 없습니다.' : 'No notices found.'}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Gallery Grid */}
+        <div className="mt-16">
+          <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center">
+            <Activity className="w-5 h-5 mr-2 text-brand-500" /> {language === 'KO' ? '활동 갤러리' : 'Activity Gallery'}
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+             {[1, 2, 3, 4].map((i) => (
+               <div key={i} className="aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group">
+                 <img src={`https://picsum.photos/400/400?random=${i + 20}`} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+               </div>
+             ))}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // --- Detail Modal Component ---
 const DetailModal = ({ 
@@ -629,50 +718,112 @@ const App: React.FC = () => {
     }
   }, [language]);
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'HOME':
-        return (
-          <>
-            <HeroSection setTab={setActiveTab} language={language} />
-            <AboutSection language={language} />
-            <ResearchSection language={language} />
-            <div className="bg-slate-50 py-16">
-               <div className="max-w-7xl mx-auto px-4 text-center">
-                 <h2 className="text-2xl font-bold text-slate-900 mb-8">{language === 'KO' ? '주요 파트너' : 'Key Partners'}</h2>
-                 <div className="flex flex-wrap justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-                    {/* Placeholder logos */}
-                    <div className="h-12 w-32 bg-slate-300 rounded"></div>
-                    <div className="h-12 w-32 bg-slate-300 rounded"></div>
-                    <div className="h-12 w-32 bg-slate-300 rounded"></div>
-                    <div className="h-12 w-32 bg-slate-300 rounded"></div>
-                    <div className="h-12 w-32 bg-slate-300 rounded"></div>
-                 </div>
-               </div>
-            </div>
-          </>
-        );
-      case 'ABOUT':
-        return <AboutSection language={language} />;
-      case 'RESEARCH':
-        return <ResearchSection language={language} />;
-      case 'DOCS':
-        return <DocsSection documents={documents} onDocClick={setSelectedDoc} language={language} />;
-      case 'NOTICES':
-        return <NoticesSection notices={notices} onNoticeClick={setSelectedNotice} language={language} />;
-      case 'ADMIN':
-        return (
-          <AdminDashboard 
-            notices={notices} 
-            setNotices={setNotices} 
-            documents={documents}
-            setDocuments={setDocuments}
-            onLogout={() => setActiveTab('HOME')} 
-          />
-        );
-      default:
-        return <HeroSection setTab={setActiveTab} language={language} />;
+  // Scroll Spy Logic for One-Page Navigation
+  useEffect(() => {
+    if (activeTab === 'ADMIN') return;
+
+    const sections = ['HOME', 'ABOUT', 'RESEARCH', 'DOCS', 'NOTICES'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Only update if we are not in Admin mode
+            setActiveTab(entry.target.id.toUpperCase() as NavigationItem);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '-70px 0px -70% 0px', // Trigger when section is near top, accounting for fixed header
+        threshold: 0.1,
+      }
+    );
+
+    sections.forEach((id) => {
+      const element = document.getElementById(id.toLowerCase());
+      if (element) observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [activeTab]);
+
+  const scrollToSection = (id: string) => {
+    if (id === 'ADMIN') {
+      setActiveTab('ADMIN');
+      window.scrollTo(0, 0);
+      return;
     }
+    
+    // If currently in ADMIN, switch back first (conceptually)
+    // But since ADMIN replaces the view, we just set activeTab to HOME then scroll?
+    // In this implementation, if activeTab is ADMIN, the sections don't exist.
+    // So we'd need to set activeTab first, wait for render, then scroll.
+    // For simplicity here, we assume navigation handles the view switch if needed.
+    
+    const element = document.getElementById(id.toLowerCase());
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  const renderContent = () => {
+    if (activeTab === 'ADMIN') {
+      return (
+        <AdminDashboard 
+          notices={notices} 
+          setNotices={setNotices} 
+          documents={documents}
+          setDocuments={setDocuments}
+          onLogout={() => {
+            setActiveTab('HOME');
+            setTimeout(() => window.scrollTo(0, 0), 100);
+          }} 
+        />
+      );
+    }
+
+    return (
+      <>
+        <section id="home">
+          <HeroSection scrollToSection={scrollToSection} language={language} />
+        </section>
+        <section id="about">
+          <AboutSection language={language} />
+        </section>
+        <section id="research">
+          <ResearchSection language={language} />
+        </section>
+        {/* Placeholder section for "Partner" banner if needed, or included in Research */}
+        <div className="bg-slate-50 py-16">
+            <div className="max-w-7xl mx-auto px-4 text-center">
+              <h2 className="text-2xl font-bold text-slate-900 mb-8">{language === 'KO' ? '주요 파트너' : 'Key Partners'}</h2>
+              <div className="flex flex-wrap justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                {/* Placeholder logos */}
+                <div className="h-12 w-32 bg-slate-300 rounded"></div>
+                <div className="h-12 w-32 bg-slate-300 rounded"></div>
+                <div className="h-12 w-32 bg-slate-300 rounded"></div>
+                <div className="h-12 w-32 bg-slate-300 rounded"></div>
+                <div className="h-12 w-32 bg-slate-300 rounded"></div>
+              </div>
+            </div>
+        </div>
+        <section id="docs">
+          <DocsSection documents={documents} onDocClick={setSelectedDoc} language={language} />
+        </section>
+        <section id="notices">
+          <NoticesSection notices={notices} onNoticeClick={setSelectedNotice} language={language} />
+        </section>
+      </>
+    );
   };
 
   return (
@@ -680,7 +831,7 @@ const App: React.FC = () => {
       {activeTab !== 'ADMIN' && (
         <Navigation 
           activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
+          setActiveTab={setActiveTab} // Note: This now might be used by Nav just for display or simple state, but Nav click handles scroll
           language={language} 
           setLanguage={setLanguage} 
         />

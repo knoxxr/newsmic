@@ -27,9 +27,33 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
   ];
 
   const handleNavClick = (id: NavigationItem) => {
-    setActiveTab(id);
+    // If it's ADMIN (handled outside this list usually, but just in case) or we are currently IN admin mode,
+    // we might need to reset state. But for standard One-Page nav:
+    
+    if (id === 'ADMIN') {
+        setActiveTab('ADMIN');
+        return;
+    }
+
+    // Scroll to element
+    const element = document.getElementById(id.toLowerCase());
+    if (element) {
+        const headerOffset = 80; // Adjusted for sticky header height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+    } else {
+        // Fallback if element not found (e.g. if we were in ADMIN mode)
+        // This sets the state, which triggers a re-render of App.tsx to show the sections,
+        // then we might need to scroll.
+        setActiveTab(id);
+    }
+    
     setIsOpen(false);
-    window.scrollTo(0, 0);
   };
 
   const toggleLanguage = () => {
@@ -37,7 +61,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center cursor-pointer" onClick={() => handleNavClick('HOME')}>
@@ -56,13 +80,16 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 relative ${
                   activeTab === item.id
-                    ? 'text-brand-600 border-b-2 border-brand-600'
+                    ? 'text-brand-600'
                     : 'text-slate-600 hover:text-brand-600'
                 }`}
               >
                 {item.label}
+                <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-brand-600 transform transition-transform duration-300 ${
+                    activeTab === item.id ? 'scale-x-100' : 'scale-x-0'
+                }`}></span>
               </button>
             ))}
             <button 
