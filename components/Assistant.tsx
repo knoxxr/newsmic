@@ -1,16 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles } from 'lucide-react';
-import { ChatMessage } from '../types';
+import { ChatMessage, Language } from '../types';
 import { sendMessageToGemini } from '../services/geminiService';
 
-const Assistant: React.FC = () => {
+interface AssistantProps {
+  language: Language;
+}
+
+const Assistant: React.FC<AssistantProps> = ({ language }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: '안녕하세요! 스마트제조혁신센터 AI 연구원입니다. 궁금한 점이 있으신가요?', timestamp: new Date() }
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize greeting based on language
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([{ 
+        role: 'model', 
+        text: language === 'KO' 
+          ? '안녕하세요! 스마트제조혁신센터 AI 연구원입니다. 궁금한 점이 있으신가요?' 
+          : 'Hello! I am the AI Researcher at SMIC. How can I assist you today?',
+        timestamp: new Date() 
+      }]);
+    }
+  }, [language]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,7 +52,7 @@ const Assistant: React.FC = () => {
       setMessages(prev => [...prev, modelMsg]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { role: 'model', text: '오류가 발생했습니다. 다시 시도해주세요.', timestamp: new Date() }]);
+      setMessages(prev => [...prev, { role: 'model', text: language === 'KO' ? '오류가 발생했습니다.' : 'An error occurred.', timestamp: new Date() }]);
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +89,7 @@ const Assistant: React.FC = () => {
               <h3 className="font-bold text-sm">SMIC AI Assistant</h3>
               <p className="text-xs text-brand-100 flex items-center">
                 <span className="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
-                Gemini 2.5 Flash 연결됨
+                Gemini 2.5 Flash {language === 'KO' ? '연결됨' : 'Connected'}
               </p>
             </div>
           </div>
@@ -111,7 +126,7 @@ const Assistant: React.FC = () => {
               </div>
               <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex items-center">
                 <Loader2 className="w-4 h-4 text-brand-600 animate-spin mr-2" />
-                <span className="text-xs text-slate-500">답변 생성 중...</span>
+                <span className="text-xs text-slate-500">{language === 'KO' ? '답변 생성 중...' : 'Thinking...'}</span>
               </div>
             </div>
           )}
@@ -126,7 +141,7 @@ const Assistant: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="피지컬 AI 연구에 대해 물어보세요..."
+              placeholder={language === 'KO' ? "피지컬 AI 연구에 대해 물어보세요..." : "Ask about Physical AI research..."}
               className="flex-1 bg-transparent border-none focus:outline-none text-sm text-slate-800 placeholder:text-slate-400"
               disabled={isLoading}
             />

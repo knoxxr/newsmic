@@ -1,27 +1,39 @@
 import React, { useState } from 'react';
 import { Menu, X, Cpu, Globe } from 'lucide-react';
-import { NavigationItem } from '../types';
+import { NavigationItem, Language } from '../types';
 
 interface NavigationProps {
   activeTab: NavigationItem;
   setActiveTab: (tab: NavigationItem) => void;
+  language: Language;
+  setLanguage: (lang: Language) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
+const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, language, setLanguage }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navItems: { id: NavigationItem; label: string }[] = [
+  const navItems: { id: NavigationItem; label: string }[] = language === 'KO' ? [
     { id: 'HOME', label: '홈' },
     { id: 'ABOUT', label: '센터 소개' },
     { id: 'RESEARCH', label: '핵심 연구' },
     { id: 'DOCS', label: '기술 문서' },
     { id: 'NOTICES', label: '공지/홍보' },
+  ] : [
+    { id: 'HOME', label: 'Home' },
+    { id: 'ABOUT', label: 'About' },
+    { id: 'RESEARCH', label: 'Research' },
+    { id: 'DOCS', label: 'Documents' },
+    { id: 'NOTICES', label: 'Notices' },
   ];
 
   const handleNavClick = (id: NavigationItem) => {
     setActiveTab(id);
     setIsOpen(false);
     window.scrollTo(0, 0);
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'KO' ? 'EN' : 'KO');
   };
 
   return (
@@ -32,7 +44,9 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
             <Cpu className="h-8 w-8 text-brand-600 mr-2" />
             <div className="flex flex-col">
               <span className="font-bold text-xl text-slate-900 tracking-tight">SMIC</span>
-              <span className="text-xs text-slate-500 font-medium">스마트제조혁신센터 안산</span>
+              <span className="text-xs text-slate-500 font-medium">
+                {language === 'KO' ? '스마트제조혁신센터 안산' : 'Smart Manufacturing Innovation Center'}
+              </span>
             </div>
           </div>
 
@@ -51,13 +65,22 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
                 {item.label}
               </button>
             ))}
-            <button className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm flex items-center">
-              <Globe className="w-4 h-4 mr-1" /> ENG
+            <button 
+              onClick={toggleLanguage}
+              className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm flex items-center"
+            >
+              <Globe className="w-4 h-4 mr-1" /> {language === 'KO' ? 'ENG' : 'KOR'}
             </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-2">
+            <button 
+                onClick={toggleLanguage}
+                className="text-slate-600 font-bold text-xs border border-slate-300 rounded px-2 py-1"
+            >
+              {language === 'KO' ? 'EN' : 'KO'}
+            </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-slate-600 hover:text-slate-900 focus:outline-none p-2"

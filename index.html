@@ -17,8 +17,12 @@
               brand: {
                 50: '#f0f9ff',
                 100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
                 500: '#0ea5e9',
                 600: '#0284c7',
+                700: '#0369a1',
                 800: '#075985',
                 900: '#0c4a6e',
               }
@@ -40,21 +44,24 @@
           scrollbar-width: none;
       }
       
-      /* Ken Burns Effect for Hero Background */
-      @keyframes kenburns {
+      /* Dynamic Floating Zoom Effect for Hero Background */
+      @keyframes float-zoom {
         0% {
           transform: scale(1) translate(0, 0);
         }
-        50% {
-          transform: scale(1.1) translate(-1%, -1%);
+        33% {
+          transform: scale(1.1) translate(-2%, 1%);
+        }
+        66% {
+          transform: scale(1.05) translate(1%, -2%);
         }
         100% {
           transform: scale(1) translate(0, 0);
         }
       }
       
-      .animate-kenburns {
-        animation: kenburns 30s ease-in-out infinite;
+      .animate-float-zoom {
+        animation: float-zoom 25s ease-in-out infinite;
       }
     </style>
   <script type="importmap">
