@@ -1,5 +1,5 @@
-export type NavigationItem = 'HOME' | 'ABOUT' | 'RESEARCH' | 'DOCS' | 'NOTICES' | 'CONTACT' | 'ADMIN';
 
+export type NavigationItem = 'HOME' | 'ABOUT' | 'RESEARCH' | 'DOCS' | 'NOTICES' | 'CONTACT' | 'ADMIN';
 export type Language = 'KO' | 'EN';
 
 export interface ResearchArea {
@@ -15,9 +15,8 @@ export interface NoticeItem {
   id: number;
   title: string;
   date: string;
-  category: '공지' | '보도' | '행사' | 'Notice' | 'Press' | 'Event';
+  category: '공지' | '보도' | '행사';
   content: string;
-  imageUrl?: string; // Optional image URL for notices
 }
 
 export interface TechDoc {
@@ -26,7 +25,6 @@ export interface TechDoc {
   type: 'PDF' | 'API' | 'Whitepaper';
   date: string;
   summary: string;
-  content?: string; // Detailed content description
 }
 
 export interface ChatMessage {

@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { Menu, X, Cpu, Globe } from 'lucide-react';
 import { NavigationItem, Language } from '../types';
+import { translations } from '../locales';
 
 interface NavigationProps {
   activeTab: NavigationItem;
@@ -11,49 +13,20 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, language, setLanguage }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const t = translations[language].nav;
 
-  const navItems: { id: NavigationItem; label: string }[] = language === 'KO' ? [
-    { id: 'HOME', label: '홈' },
-    { id: 'ABOUT', label: '센터 소개' },
-    { id: 'RESEARCH', label: '핵심 연구' },
-    { id: 'DOCS', label: '기술 문서' },
-    { id: 'NOTICES', label: '공지/홍보' },
-  ] : [
-    { id: 'HOME', label: 'Home' },
-    { id: 'ABOUT', label: 'About' },
-    { id: 'RESEARCH', label: 'Research' },
-    { id: 'DOCS', label: 'Documents' },
-    { id: 'NOTICES', label: 'Notices' },
+  const navItems: { id: NavigationItem; label: string }[] = [
+    { id: 'HOME', label: t.home },
+    { id: 'ABOUT', label: t.about },
+    { id: 'RESEARCH', label: t.research },
+    { id: 'DOCS', label: t.docs },
+    { id: 'NOTICES', label: t.notices },
   ];
 
   const handleNavClick = (id: NavigationItem) => {
-    // If it's ADMIN (handled outside this list usually, but just in case) or we are currently IN admin mode,
-    // we might need to reset state. But for standard One-Page nav:
-    
-    if (id === 'ADMIN') {
-        setActiveTab('ADMIN');
-        return;
-    }
-
-    // Scroll to element
-    const element = document.getElementById(id.toLowerCase());
-    if (element) {
-        const headerOffset = 80; // Adjusted for sticky header height
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
-        });
-    } else {
-        // Fallback if element not found (e.g. if we were in ADMIN mode)
-        // This sets the state, which triggers a re-render of App.tsx to show the sections,
-        // then we might need to scroll.
-        setActiveTab(id);
-    }
-    
+    setActiveTab(id);
     setIsOpen(false);
+    window.scrollTo(0, 0);
   };
 
   const toggleLanguage = () => {
@@ -61,15 +34,15 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center cursor-pointer" onClick={() => handleNavClick('HOME')}>
             <Cpu className="h-8 w-8 text-brand-600 mr-2" />
             <div className="flex flex-col">
               <span className="font-bold text-xl text-slate-900 tracking-tight">SMIC</span>
-              <span className="text-xs text-slate-500 font-medium">
-                {language === 'KO' ? '스마트제조혁신센터 안산' : 'Smart Manufacturing Innovation Center'}
+              <span className="text-[10px] text-slate-500 font-medium uppercase tracking-tighter">
+                {translations[language].siteSubName}
               </span>
             </div>
           </div>
@@ -80,33 +53,28 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`px-3 py-2 text-sm font-medium transition-all duration-300 relative ${
+                className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
                   activeTab === item.id
-                    ? 'text-brand-600'
+                    ? 'text-brand-600 border-b-2 border-brand-600'
                     : 'text-slate-600 hover:text-brand-600'
                 }`}
               >
                 {item.label}
-                <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-brand-600 transform transition-transform duration-300 ${
-                    activeTab === item.id ? 'scale-x-100' : 'scale-x-0'
-                }`}></span>
               </button>
             ))}
             <button 
               onClick={toggleLanguage}
-              className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm flex items-center"
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center border border-slate-200 shadow-sm"
             >
-              <Globe className="w-4 h-4 mr-1" /> {language === 'KO' ? 'ENG' : 'KOR'}
+              <Globe className="w-4 h-4 mr-2 text-brand-600" /> 
+              {language === 'KO' ? 'ENG' : 'KOR'}
             </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <button 
-                onClick={toggleLanguage}
-                className="text-slate-600 font-bold text-xs border border-slate-300 rounded px-2 py-1"
-            >
-              {language === 'KO' ? 'EN' : 'KO'}
+          <div className="md:hidden flex items-center space-x-4">
+            <button onClick={toggleLanguage} className="text-xs font-bold text-slate-500 bg-slate-100 p-2 rounded">
+              {language === 'KO' ? 'ENG' : 'KOR'}
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}

@@ -1,39 +1,47 @@
+
 import { GoogleGenAI } from "@google/genai";
+import { Language } from "../types";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
-const SYSTEM_INSTRUCTION = `
+const getSystemInstruction = (lang: Language) => `
 당신은 대한민국 안산에 위치한 '스마트제조혁신센터(SMIC)'의 AI 가상 연구원입니다.
-센터의 주요 임무는 미래 제조업 경쟁력 향상을 위한 인공지능(AI)과 피지컬 AI(Physical AI, 로보틱스 등) 연구, 그리고 이를 실증하는 데모공장 인프라 운영입니다.
+현재 사용자의 선호 언어는 [${lang === 'KO' ? '한국어' : '영어'}]입니다.
 
-방문객의 질문에 대해 친절하고 전문적으로 답변해 주세요.
-주요 답변 주제:
-1. 센터 소개: 안산에 위치, 제조업 혁신 주도.
-2. 핵심 연구 분야: 산업용 AI, 협동 로봇, 피지컬 AI, 디지털 트윈, 5G/6G 제조 응용.
-3. 데모공장: 개발된 기술을 실제 제조 라인과 유사한 환경에서 테스트하고 검증하는 실증 인프라.
+센터 주요 정보:
+1. 위치: 경기도 안산시 (안산 사이언스 밸리 내).
+2. 미션: 제조업 디지털 전환 선도, 중소/중견 기업 경쟁력 강화.
+3. 핵심 연구: 산업용 AI(예지보전, 공정 최적화), 피지컬 AI 및 로보틱스(협동로봇, AMR), 5G/6G 제조 응용.
+4. 데모공장: 실제 제조 공정과 동일한 실증 테스트베드 운영.
 
-답변은 한국어로 간결하고 명확하게 작성해 주세요. 전문적인 용어를 사용하되, 일반인도 이해할 수 있도록 쉽게 설명해 주세요.
+지침:
+- 사용자가 질문하는 언어에 맞춰 답변하세요. (주로 ${lang === 'KO' ? '한국어' : '영어'})
+- 답변은 전문적이면서도 친절해야 합니다.
+- 간결하고 명확하게 답변해 주세요.
 `;
 
-export const sendMessageToGemini = async (message: string, history: { role: 'user' | 'model'; text: string }[]) => {
+export const sendMessageToGemini = async (message: string, history: { role: 'user' | 'model'; text: string }[], lang: Language) => {
   try {
-    const chat = ai.chats.create({
-      model: 'gemini-2.5-flash',
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: [
+        ...history.map(h => ({
+          role: h.role === 'user' ? 'user' : 'model' as any,
+          parts: [{ text: h.text }],
+        })),
+        { role: 'user', parts: [{ text: message }] }
+      ],
       config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
+        systemInstruction: getSystemInstruction(lang),
         temperature: 0.7,
       },
-      history: history.map(h => ({
-        role: h.role,
-        parts: [{ text: h.text }],
-      })),
     });
 
-    const result = await chat.sendMessage({ message });
-    return result.text;
+    return response.text;
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "죄송합니다. 현재 AI 시스템 연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요.";
+    return lang === 'KO' 
+      ? "죄송합니다. 현재 AI 시스템 연결이 원활하지 않습니다." 
+      : "Sorry, I am having trouble connecting to the AI system right now.";
   }
 };

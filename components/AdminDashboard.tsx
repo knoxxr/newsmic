@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, LayoutDashboard, FileText, LogOut, Plus, Trash2, Edit2, Save, X, Users, Activity, Bell, BookOpen, Image as ImageIcon } from 'lucide-react';
+import { Lock, LayoutDashboard, FileText, LogOut, Plus, Trash2, Edit2, Save, X, Users, Activity, Bell, BookOpen } from 'lucide-react';
 import { NoticeItem, TechDoc } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -45,7 +45,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
         content: editingNotice.content,
         date: new Date().toISOString().split('T')[0],
         category: editingNotice.category || '공지',
-        imageUrl: editingNotice.imageUrl,
       };
       setNotices(prev => [newItem, ...prev]);
     }
@@ -70,7 +69,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
         id: newId,
         title: editingDoc.title,
         summary: editingDoc.summary,
-        content: editingDoc.content || editingDoc.summary, // Default to summary if content not provided
         type: editingDoc.type || 'PDF',
         date: new Date().toISOString().split('T')[0].replace(/-/g, '.'),
       };
@@ -248,7 +246,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
               <div className="p-6 border-b border-slate-100 flex justify-between items-center">
                 <h3 className="font-bold text-slate-800">등록된 공지사항</h3>
                 <button
-                  onClick={() => setEditingNotice({ category: '공지', title: '', content: '', imageUrl: '' })}
+                  onClick={() => setEditingNotice({ category: '공지', title: '', content: '' })}
                   className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2" /> 새 공지 작성
@@ -276,25 +274,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
                         onChange={(e) => setEditingNotice(prev => ({ ...prev, title: e.target.value }))}
                       />
                     </div>
-                    {/* Image URL Input */}
-                    <div className="flex items-center gap-2">
-                      <ImageIcon className="w-5 h-5 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="이미지 URL을 입력하세요 (예: https://...)"
-                        className="flex-1 p-2 border border-slate-300 rounded-lg text-sm"
-                        value={editingNotice.imageUrl || ''}
-                        onChange={(e) => setEditingNotice(prev => ({ ...prev, imageUrl: e.target.value }))}
-                      />
-                    </div>
-                    {editingNotice.imageUrl && (
-                      <div className="relative h-40 w-full rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
-                         <img src={editingNotice.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                      </div>
-                    )}
                     <textarea
                       placeholder="내용을 입력하세요"
-                      rows={6}
+                      rows={4}
                       className="w-full p-2 border border-slate-300 rounded-lg text-sm"
                       value={editingNotice.content || ''}
                       onChange={(e) => setEditingNotice(prev => ({ ...prev, content: e.target.value }))}
@@ -341,10 +323,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
                             {notice.category}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-slate-700 flex items-center">
-                          {notice.imageUrl && <ImageIcon className="w-4 h-4 text-brand-500 mr-2" />}
-                          {notice.title}
-                        </td>
+                        <td className="px-6 py-4 text-slate-700">{notice.title}</td>
                         <td className="px-6 py-4 text-slate-500">{notice.date}</td>
                         <td className="px-6 py-4 text-right space-x-2">
                           <button 
@@ -373,7 +352,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
               <div className="p-6 border-b border-slate-100 flex justify-between items-center">
                 <h3 className="font-bold text-slate-800">기술문서 관리</h3>
                 <button
-                  onClick={() => setEditingDoc({ type: 'PDF', title: '', summary: '', content: '' })}
+                  onClick={() => setEditingDoc({ type: 'PDF', title: '', summary: '' })}
                   className="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2" /> 문서 등록
@@ -402,18 +381,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
                       />
                     </div>
                     <textarea
-                      placeholder="문서 요약(Summary)을 입력하세요"
-                      rows={2}
+                      placeholder="문서 요약/설명을 입력하세요"
+                      rows={3}
                       className="w-full p-2 border border-slate-300 rounded-lg text-sm"
                       value={editingDoc.summary || ''}
                       onChange={(e) => setEditingDoc(prev => ({ ...prev, summary: e.target.value }))}
-                    />
-                    <textarea
-                      placeholder="상세 내용을 입력하세요 (Optional)"
-                      rows={6}
-                      className="w-full p-2 border border-slate-300 rounded-lg text-sm"
-                      value={editingDoc.content || ''}
-                      onChange={(e) => setEditingDoc(prev => ({ ...prev, content: e.target.value }))}
                     />
                     <div className="flex justify-end gap-2">
                       <button 
