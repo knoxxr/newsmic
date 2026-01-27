@@ -66,10 +66,10 @@ const HeroSection = ({ setTab, language }: { setTab: (t: NavigationItem) => void
   return (
     <div className="relative bg-slate-900 overflow-hidden">
       <div className="absolute inset-0 opacity-40 overflow-hidden">
-        <img 
-          src="https://picsum.photos/1920/1080?grayscale&blur=2" 
-          className="w-full h-full object-cover animate-kenburns origin-center" 
-          alt="Factory" 
+        <img
+          src="https://picsum.photos/1920/1080?grayscale&blur=2"
+          className="w-full h-full object-cover animate-kenburns origin-center"
+          alt="Factory"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
@@ -158,10 +158,10 @@ const ResearchSection = ({ language }: { language: Language }) => {
           {areas.map((area) => (
             <div key={area.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-slate-100 group">
               <div className="h-48 overflow-hidden relative">
-                 <img src={area.imageUrl} alt={area.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-700 uppercase">
-                   Core Tech
-                 </div>
+                <img src={area.imageUrl} alt={area.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand-700 uppercase">
+                  Core Tech
+                </div>
               </div>
               <div className="p-6">
                 <div className="flex items-center mb-4">
@@ -194,30 +194,34 @@ const ResearchSection = ({ language }: { language: Language }) => {
               <p className="text-slate-500 text-sm mt-1">{t.visualDesc}</p>
             </div>
             <div className="flex gap-2">
-               <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold flex items-center uppercase">
-                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span> Operational
-               </span>
+              <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold flex items-center uppercase">
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span> Operational
+              </span>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip />
-                <Line type="monotone" dataKey="efficiency" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 4, fill: '#0ea5e9', stroke: '#fff' }} />
-              </LineChart>
-            </ResponsiveContainer>
-            <ResponsiveContainer width="100%" height="100%">
-               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip cursor={{fill: '#f1f5f9'}} />
-                <Bar dataKey="production" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="w-full h-80" style={{ position: 'relative', width: '100%', height: '320px' }}>
+              <ResponsiveContainer width="99%" height="100%" minWidth={0}>
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="efficiency" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 4, fill: '#0ea5e9', stroke: '#fff' }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="w-full h-80" style={{ position: 'relative', width: '100%', height: '320px' }}>
+              <ResponsiveContainer width="99%" height="100%" minWidth={0}>
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip cursor={{ fill: '#f1f5f9' }} />
+                  <Bar dataKey="production" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
@@ -249,8 +253,8 @@ const DocsSection = ({ documents, language }: { documents: TechDoc[]; language: 
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                     <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-slate-100">{doc.type}</span>
-                     <span className="text-slate-400 text-xs">{doc.date}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-slate-100">{doc.type}</span>
+                    <span className="text-slate-400 text-xs">{doc.date}</span>
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">{doc.title}</h3>
                   <p className="text-sm text-slate-500 mt-1">{doc.summary}</p>
@@ -263,13 +267,13 @@ const DocsSection = ({ documents, language }: { documents: TechDoc[]; language: 
           ))}
         </div>
         <div className="mt-12 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between">
-           <div className="mb-6 md:mb-0">
-              <h3 className="text-xl font-bold mb-2">{t.bannerTitle}</h3>
-              <p className="text-slate-300">{t.bannerDesc}</p>
-           </div>
-           <button className="bg-brand-600 hover:bg-brand-500 px-6 py-3 rounded-lg font-bold whitespace-nowrap">
-             {t.bannerBtn}
-           </button>
+          <div className="mb-6 md:mb-0">
+            <h3 className="text-xl font-bold mb-2">{t.bannerTitle}</h3>
+            <p className="text-slate-300">{t.bannerDesc}</p>
+          </div>
+          <button className="bg-brand-600 hover:bg-brand-500 px-6 py-3 rounded-lg font-bold whitespace-nowrap">
+            {t.bannerBtn}
+          </button>
         </div>
       </div>
     </div>
@@ -291,8 +295,8 @@ const NoticesSection = ({ notices, language }: { notices: NoticeItem[]; language
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                     <span className="text-xs font-bold px-2 py-1 bg-slate-100 rounded uppercase">{notice.category}</span>
-                     <span className="text-xs text-slate-400">{notice.date}</span>
+                    <span className="text-xs font-bold px-2 py-1 bg-slate-100 rounded uppercase">{notice.category}</span>
+                    <span className="text-xs text-slate-400">{notice.date}</span>
                   </div>
                   <h3 className="text-lg font-medium text-slate-900 group-hover:text-brand-600">{notice.title}</h3>
                 </div>
@@ -304,11 +308,11 @@ const NoticesSection = ({ notices, language }: { notices: NoticeItem[]; language
         <div className="mt-16">
           <h3 className="text-xl font-bold text-slate-900 mb-6">{t.gallery}</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-             {[1, 2, 3, 4].map((i) => (
-               <div key={i} className="aspect-square rounded-xl overflow-hidden group">
-                 <img src={`https://picsum.photos/400/400?random=${i + 20}`} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-all" />
-               </div>
-             ))}
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="aspect-square rounded-xl overflow-hidden group">
+                <img src={`https://picsum.photos/400/400?random=${i + 20}`} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-all" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -338,7 +342,7 @@ const App: React.FC = () => {
       case 'RESEARCH': return <ResearchSection language={language} />;
       case 'DOCS': return <DocsSection documents={documents} language={language} />;
       case 'NOTICES': return <NoticesSection notices={notices} language={language} />;
-      case 'ADMIN': return <AdminDashboard notices={notices} setNotices={()=>{}} documents={documents} setDocuments={()=>{}} onLogout={() => setActiveTab('HOME')} />;
+      case 'ADMIN': return <AdminDashboard notices={notices} setNotices={() => { }} documents={documents} setDocuments={() => { }} onLogout={() => setActiveTab('HOME')} />;
       default: return <HeroSection setTab={setActiveTab} language={language} />;
     }
   };
