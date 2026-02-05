@@ -365,13 +365,7 @@ const NoticeDetail = ({ notice, onBack }: { notice: NoticeItem; onBack: () => vo
     setIsContentPopupVisible(false);
   };
 
-  useEffect(() => {
-    if (notice.category === '공지') {
-      setIsContentPopupVisible(true);
-    } else {
-      setIsContentPopupVisible(false); // Ensure it's closed if category changes
-    }
-  }, [notice]);
+
   
   return (
     <>
@@ -387,24 +381,15 @@ const NoticeDetail = ({ notice, onBack }: { notice: NoticeItem; onBack: () => vo
           </div>
           <h1 className="text-3xl font-bold text-slate-900 mb-6">{notice.title}</h1>
           <div className="prose max-w-none text-slate-700">
-            <p>{notice.content}</p>
+            <p className="whitespace-pre-wrap">{notice.content}</p>
             {/* Add more detailed content here if available */}
-            <p>자세한 내용은 담당자에게 문의해 주시기 바랍니다.</p>
           </div>
 
         </div>
       </div>
     </div>
 
-    {isContentPopupVisible && notice.category === '공지' && (
-      <PopupModal
-        title={notice.title}
-        content={notice.content}
-        onClose={handleCloseContentPopup}
-        onDontShowToday={() => handleCloseContentPopup()} // No "Don't show today" persistence for content popups
-        language={"KO"} // Assuming KO for notice content for now, can be made dynamic if needed
-      />
-    )}
+
     </>
   );
 };
