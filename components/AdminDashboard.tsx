@@ -85,6 +85,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fileContent = event.target?.result as string;
+        setEditingDoc(prev => ({ ...prev, content: fileContent }));
+      };
+      reader.readAsText(file); // Read file as text
+    } else {
+      setEditingDoc(prev => ({ ...prev, content: '' })); // Clear content if no file selected
+    }
+  };
+
   const visitorData = [
     { name: 'Mon', visitors: 120 },
     { name: 'Tue', visitors: 145 },
@@ -408,6 +422,22 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
                       value={editingDoc.summary || ''}
                       onChange={(e) => setEditingDoc(prev => ({ ...prev, summary: e.target.value }))}
                     />
+                    {/* File Upload Input */}
+                    <div>
+                      <label htmlFor="docFile" className="block text-sm font-medium text-slate-700 mb-1">파일 업로드 (Optional)</label>
+                      <input
+                        id="docFile"
+                        type="file"
+                        className="w-full text-sm text-slate-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-full file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-brand-50 file:text-brand-700
+                          hover:file:bg-brand-100"
+                        onChange={handleFileChange}
+                      />
+                      {editingDoc.content && <p className="mt-2 text-xs text-slate-500">파일 내용이 로드되었습니다.</p>}
+                    </div>
                     <textarea
                       placeholder="상세 내용을 입력하세요 (Optional)"
                       rows={6}
