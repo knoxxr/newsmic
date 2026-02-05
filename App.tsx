@@ -391,16 +391,7 @@ const NoticeDetail = ({ notice, onBack }: { notice: NoticeItem; onBack: () => vo
             {/* Add more detailed content here if available */}
             <p>자세한 내용은 담당자에게 문의해 주시기 바랍니다.</p>
           </div>
-          {notice.category === '공지' && (
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setIsContentPopupVisible(true)}
-                className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-colors"
-              >
-                내용 팝업으로 보기
-              </button>
-            </div>
-          )}
+
         </div>
       </div>
     </div>
