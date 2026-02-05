@@ -728,27 +728,37 @@ const App: React.FC = () => {
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [popupNotice, setPopupNotice] = useState<NoticeItem | null>(null);
 
 
-  const [popupContent, setPopupContent] = useState({
+  
 
 
-    title: '2026년도 2월/3월 내방 투어 미진행 안내',
+    const [isInitialPopupVisible, setIsInitialPopupVisible] = useState(false);
 
 
-    content: `2026년 3월, 4월에 개최 예정인 전시회 출품 진행 및 데모공장 인프라 업그레이드 작업을 위하여
-
-부득이하게 2026년도 2월/3월 내방 투어는 미진행 예정입니다.
-
-2026년 4월부터 투어가 재개될 예정입니다.
-
-투어 참석 희망하시는 분들의 너른 양해 부탁드립니다. 감사합니다.
-
-문의 | smic@smic.kr (031-498-7160)`
+    const [initialPopupContent, setInitialPopupContent] = useState({
 
 
-  });
+      title: '2026년도 2월/3월 내방 투어 미진행 안내',
+
+
+      content: `2026년 3월, 4월에 개최 예정인 전시회 출품 진행 및 데모공장 인프라 업그레이드 작업을 위하여
+
+
+  부득이하게 2026년도 2월/3월 내방 투어는 미진행 예정입니다.
+
+
+  2026년 4월부터 투어가 재개될 예정입니다.
+
+
+  투어 참석 희망하시는 분들의 너른 양해 부탁드립니다. 감사합니다.
+
+
+  문의 | smic@smic.kr (031-498-7160)`
+
+
+    });
 
 
 
@@ -757,58 +767,112 @@ const App: React.FC = () => {
   // Popup Visibility Logic
 
 
-  useEffect(() => {
+    useEffect(() => {
 
 
-    const dontShowUntil = localStorage.getItem('popupDontShowUntil');
+      const dontShowUntil = localStorage.getItem('popupDontShowUntil');
 
 
-    if (!dontShowUntil || Date.now() > parseInt(dontShowUntil, 10)) {
+      if (!dontShowUntil || Date.now() > parseInt(dontShowUntil, 10)) {
 
 
-      setIsPopupVisible(true);
+        setIsInitialPopupVisible(true);
 
 
-    }
+      }
 
 
-  }, []);
-
-
-
-
-
-  const handleClosePopup = () => {
-
-
-    setIsPopupVisible(false);
-
-
-  };
+    }, []);
 
 
 
 
 
-  const handleDontShowToday = () => {
+    const handleCloseInitialPopup = () => {
 
 
-    const tomorrow = new Date();
 
 
-    tomorrow.setDate(tomorrow.getDate() + 1);
+
+      setIsInitialPopupVisible(false);
 
 
-    tomorrow.setHours(0, 0, 0, 0); // Set to midnight
 
 
-    localStorage.setItem('popupDontShowUntil', tomorrow.getTime().toString());
+
+    };
 
 
-    handleClosePopup();
 
 
-  };
+
+  
+
+
+
+
+
+    // Close notice popup
+
+
+
+
+
+    const handleCloseNoticePopup = () => {
+
+
+
+
+
+      setPopupNotice(null);
+
+
+
+
+
+    };
+
+
+
+
+
+    const handleDontShowTodayInitialPopup = () => {
+
+
+
+
+
+      const tomorrow = new Date();
+
+
+
+
+
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+
+
+
+
+      tomorrow.setHours(0, 0, 0, 0); // Set to midnight
+
+
+
+
+
+      localStorage.setItem('popupDontShowUntil', tomorrow.getTime().toString());
+
+
+
+
+
+      handleCloseInitialPopup();
+
+
+
+
+
+    };
 
 
 
@@ -964,37 +1028,112 @@ const App: React.FC = () => {
 
 
 
-  useEffect(() => {
-
-
-    // Reset sub-views when changing main tabs
-
-
-    if (activeTab !== 'NOTICES') {
-
-
-        setSelectedNotice(null);
-
-
-        setIsGalleryVisible(false);
-
-
-    }
-
-
-  }, [activeTab]);
+    useEffect(() => {
 
 
 
 
 
-  const handleNoticeClick = (notice: NoticeItem) => {
 
 
-    setSelectedNotice(notice);
+
+      // Reset sub-views when changing main tabs
 
 
-  };
+
+
+
+
+
+
+      if (activeTab !== 'NOTICES') {
+
+
+
+
+
+
+
+
+          setSelectedNotice(null);
+
+
+
+
+
+
+
+
+          setIsGalleryVisible(false);
+
+
+
+
+
+
+
+
+          setPopupNotice(null); // Close notice popup when changing tabs
+
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+
+    }, [activeTab]);
+
+
+
+
+
+    const handleNoticeClick = (notice: NoticeItem) => {
+
+
+
+
+
+      if (notice.category === '공지') {
+
+
+
+
+
+        setPopupNotice(notice);
+
+
+
+
+
+      } else {
+
+
+
+
+
+        setSelectedNotice(notice);
+
+
+
+
+
+      }
+
+
+
+
+
+    };
 
 
 
@@ -1114,31 +1253,61 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col font-sans">
 
 
-      {isPopupVisible && (
+            {isInitialPopupVisible && (
 
 
-        <PopupModal 
+              <PopupModal 
 
 
-          title={popupContent.title}
+                title={initialPopupContent.title}
 
 
-          content={popupContent.content}
+                content={initialPopupContent.content}
 
 
-          onClose={handleClosePopup}
+                onClose={handleCloseInitialPopup}
 
 
-          onDontShowToday={handleDontShowToday}
+                onDontShowToday={handleDontShowTodayInitialPopup}
 
 
-          language={language}
+                language={language}
 
 
-        />
+              />
 
 
-      )}
+            )}
+
+
+      
+
+
+            {popupNotice && (
+
+
+              <PopupModal 
+
+
+                title={popupNotice.title}
+
+
+                content={popupNotice.content}
+
+
+                onClose={handleCloseNoticePopup}
+
+
+                onDontShowToday={() => { /* No "Don't show today" for notice popups */ }} // Can be implemented if needed
+
+
+                language={language}
+
+
+              />
+
+
+            )}
 
 
       {activeTab !== 'ADMIN' && <Navigation activeTab={activeTab} setActiveTab={handleSetTab} language={language} setLanguage={setLanguage} />}
