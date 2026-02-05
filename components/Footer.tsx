@@ -36,6 +36,10 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick, language }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-white text-lg font-bold mb-4">{t.title}</h3>
+            <div className="flex items-center mb-4">
+              <img src="/logo.png" alt="SMIC Logo" className="h-6 w-auto mr-2" />
+              <span className="font-bold text-xl text-white tracking-tight">SMIC</span>
+            </div>
             <p className="text-sm leading-relaxed mb-4 text-slate-400" dangerouslySetInnerHTML={{ __html: t.desc.replace(/\n/g, '<br/>') }}></p>
           </div>
           
