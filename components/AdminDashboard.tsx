@@ -337,8 +337,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
                     <tr>
                       <th className="px-6 py-3 w-20">ID</th>
                       <th className="px-6 py-3 w-24">분류</th>
-                      <th className="px-6 py-3">제목</th>
-                      <th className="px-6 py-3 w-32">작성일</th>
+                      <th className="px-4 py-3">제목</th>
+                      <th className="px-4 py-3 w-40">작성일</th>
                       <th className="px-6 py-3 w-32 text-right">관리</th>
                     </tr>
                   </thead>
@@ -355,11 +355,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ notices, setNotices, do
                             {notice.category}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-slate-700 flex items-center">
+                        <td className="px-4 py-4 text-slate-700 flex items-center">
                           {notice.imageUrl && <ImageIcon className="w-4 h-4 text-brand-500 mr-2" />}
                           {notice.title}
                         </td>
-                        <td className="px-6 py-4 text-slate-500">{notice.date}</td>
+                        <td className="px-4 py-4 text-slate-500">{notice.date}</td>
                         <td className="px-6 py-4 text-right space-x-2">
                           <button 
                             onClick={() => setEditingNotice(notice)}
