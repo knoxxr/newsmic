@@ -30,7 +30,7 @@ const PopupModal: React.FC<PopupModalProps> = ({ title, content, onClose, onDont
             <span className="font-bold text-2xl text-slate-900 tracking-tight">SMIC</span>
           </div>
         </div>
-        <h3 className="text-2xl font-bold text-slate-900 mb-4">{title}</h3> {/* Title before content */}        <div className="text-slate-700 leading-relaxed mb-6 whitespace-pre-wrap">
+        <h3 className="text-2xl font-bold text-slate-900 text-center pb-4 mb-4 border-b border-slate-200">{title}</h3> {/* Centered title with separator */}        <div className="text-slate-700 leading-relaxed mb-6 whitespace-pre-wrap">
           {content}
         </div>
 
