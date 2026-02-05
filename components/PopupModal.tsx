@@ -24,10 +24,12 @@ const PopupModal: React.FC<PopupModalProps> = ({ title, content, onClose, onDont
           <X size={24} />
         </button>
 
-        <div className="flex items-center mb-4">
-          <img src="/logo.png" alt="SMIC Logo" className="h-6 w-auto mr-2" />
-          <span className="font-bold text-xl text-slate-900 tracking-tight mr-4">SMIC</span>
-          <h3 className="text-2xl font-bold text-slate-900">{title}</h3>
+        <div className="flex flex-col items-center mb-4">
+          <div className="flex items-center mb-2">
+            <img src="/logo.png" alt="SMIC Logo" className="h-8 w-auto mr-2" />
+            <span className="font-bold text-2xl text-slate-900 tracking-tight">SMIC</span>
+          </div>
+          <h3 className="text-2xl font-bold text-slate-900 text-center">{title}</h3>
         </div>        <div className="text-slate-700 leading-relaxed mb-6 whitespace-pre-wrap">
           {content}
         </div>
