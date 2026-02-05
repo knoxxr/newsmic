@@ -15,10 +15,16 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
   const [isOpen, setIsOpen] = useState(false);
   const t = translations[language].nav;
 
-  const navItems: { id: NavigationItem; label: string }[] = [
+  const mainNavItems: { id: NavigationItem; label: string }[] = [
     { id: 'HOME', label: t.home },
     { id: 'ABOUT', label: t.about },
     { id: 'RESEARCH', label: t.research },
+    { id: 'FLOOR_INFO', label: t.floorplan },
+    { id: 'VISIT_GUIDE', label: t.visitorNotice },
+    { id: 'CONTACT', label: t.directions },
+  ];
+
+  const secondaryNavItems: { id: NavigationItem; label: string }[] = [
     { id: 'DOCS', label: t.docs },
     { id: 'NOTICES', label: t.notices },
   ];
@@ -26,7 +32,12 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
   const handleNavClick = (id: NavigationItem) => {
     setActiveTab(id);
     setIsOpen(false);
-    window.scrollTo(0, 0);
+    const element = document.getElementById(id.toLowerCase());
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const toggleLanguage = () => {
@@ -38,7 +49,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center cursor-pointer" onClick={() => handleNavClick('HOME')}>
-            <Cpu className="h-8 w-8 text-brand-600 mr-2" />
+            <img src="/logo.png" alt="SMIC Logo" className="h-8 w-auto mr-2" />
             <div className="flex flex-col">
               <span className="font-bold text-xl text-slate-900 tracking-tight">SMIC</span>
               <span className="text-[10px] text-slate-500 font-medium uppercase tracking-tighter">
@@ -48,8 +59,8 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+          <div className="hidden md:flex items-center space-x-4">
+            {mainNavItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
@@ -62,13 +73,29 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
                 {item.label}
               </button>
             ))}
-            <button 
-              onClick={toggleLanguage}
-              className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center border border-slate-200 shadow-sm"
-            >
-              <Globe className="w-4 h-4 mr-2 text-brand-600" /> 
-              {language === 'KO' ? 'ENG' : 'KOR'}
-            </button>
+            <span className="text-slate-300 mx-4">|</span>
+            <div className="flex items-center space-x-4">
+              {secondaryNavItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md ${
+                    activeTab === item.id
+                      ? 'bg-brand-700 text-white' // Active state: darker blue, white text
+                      : 'bg-brand-600 text-white hover:bg-white hover:text-brand-600' // Default: blue, white text, hover inverted
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+              <button 
+                onClick={toggleLanguage}
+                className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center border border-slate-200 shadow-sm"
+              >
+                <Globe className="w-4 h-4 mr-2 text-brand-600" /> 
+                {language === 'KO' ? 'ENG' : 'KOR'}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -90,7 +117,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
       {isOpen && (
         <div className="md:hidden bg-white border-t border-slate-100">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
+            {[...mainNavItems, ...secondaryNavItems].map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}

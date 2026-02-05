@@ -3,27 +3,30 @@ import { Language } from './types';
 
 export const translations = {
   KO: {
-    siteName: 'SMIC 안산',
-    siteSubName: '스마트제조혁신센터 안산',
+    siteName: 'SMIC',
+    siteSubName: '스마트제조혁신센터',
     nav: {
       home: '홈',
       about: '센터 소개',
       research: '핵심 연구',
       docs: '기술 문서',
       notices: '공지/홍보',
+      floorplan: '층별 안내',
+      visitorNotice: '방문 안내',
+      directions: '오시는 길',
     },
     hero: {
       badge: '제조업의 미래',
       title1: '인공지능과 피지컬 AI로',
       title2: '제조업의 미래',
       title3: '를 엽니다.',
-      desc: '스마트제조혁신센터 안산은 첨단 제조 기술의 연구와 실증을 위한 데모공장을 운영하며, 대한민국 제조업의 디지털 전환을 선도합니다.',
+      desc: '스마트제조혁신센터 안산은 첨단 제조 기술의 연구와 실증을 위한 데모공장을 운영하며,<br /> 대한민국 제조업의 디지털 전환을 선도합니다.',
       btnResearch: '핵심 기술 보기',
       btnAbout: '센터 소개',
     },
     about: {
       subtitle: 'About SMIC',
-      title: '스마트제조혁신센터 안산',
+      title: '스마트제조혁신센터',
       desc: '제조 현장의 난제를 해결하는 실용적 기술 연구의 허브',
       missionTitle: '미션 (Mission)',
       missionDesc: '제조 데이터와 AI 기술의 융합을 통해 국내 중소/중견 기업의 제조 경쟁력을 글로벌 수준으로 향상시킵니다.',
@@ -53,21 +56,66 @@ export const translations = {
       desc: 'SMIC의 새로운 소식과 행사를 알려드립니다.',
       gallery: '활동 갤러리',
     },
+    floorplan: {
+      desc: '각 층별 상세 정보를 확인하실 수 있습니다.',
+      floorList: [
+        { floor: '8F ~ 11F', name: '기업입주 시설', color: 'bg-gray-400', hasVideo: false },
+        { floor: '7F', name: '교육/세미나', color: 'bg-gray-400', hasVideo: false },
+        { floor: '6F', name: '코워킹 스페이스', color: 'bg-gray-400', hasVideo: false },
+        { floor: '5F', name: 'SMIC 운영룸', color: 'bg-blue-500', hasVideo: true },
+        { floor: '4F', name: 'CO-LAB', color: 'bg-purple-400', hasVideo: true },
+        { floor: '3F', name: '데모공장(구축 중)', color: 'bg-blue-600', hasVideo: true },
+        { floor: '2F', name: '데이터센터', color: 'bg-blue-700', hasVideo: true },
+        { floor: '1F', name: '데모공장', color: 'bg-slate-800', hasVideo: true },
+        { floor: 'B1 ~ B3', name: '지하주차장', color: 'bg-gray-400', hasVideo: false }
+      ]
+    },
+    visitorNotice: {
+      title: '방문 안내',
+      desc: '공지사항을 통해 공고되는 신청 기간에 방문 신청을 해 주시기 바랍니다.',
+      steps: [
+        { title: '신청 기간 안내', subtitle: '홈페이지 공지사항을 확인하여 신청 기간 확인' },
+        { title: '방문신청 접수', subtitle: '안내된 신청 기간 내 선착순 방문 접수', buttonText: '신청 접수' },
+        { title: '신청결과 안내', subtitle: '접수 기간 종료 후 신청 결과 통보' },
+        { title: '내방신청', subtitle: '*확정 통보 받으신 분만 신청 가능', buttonText: '내방 신청' },
+        { title: '내방확정', subtitle: '최종 내방 확정 안내' },
+        { title: '투어 프로그램', subtitle: '확정된 시간에 맞추어 투어 프로그램 진행' },
+        { title: '만족도 조사', subtitle: '방문 만족도 설문조사 참여', buttonText: '설문 참여' }
+      ]
+    },
+    directions: {
+      title: '오시는 길',
+      desc: 'SMIC 안산 센터로 오시는 길 안내입니다.',
+      tel: "전화",
+      fax: "팩스",
+      address: {
+        addr1: "경기도 안산시 상록구 해양3로 17",
+        addr2: "디지털전환 허브 1~5층",
+        tel: "031-498-7161",
+        fax: "031-498-7114",
+        email: "smic@smic.kr"
+      }
+    },
     footer: {
       desc: '미래 제조업의 경쟁력을 높이기 위해 AI와 Physical AI 기술을 연구하고 현장 적용을 실증하는 글로벌 허브입니다.',
       contact: '연락처',
       address: '경기도 안산시 상록구 해안로 705 스마트제조혁신센터',
       related: '관련 사이트',
       admin: '관리자 접속',
+      familySite: 'FAMILY SITE',
     },
     assistant: {
       welcome: '안녕하세요! 스마트제조혁신센터 AI 연구원입니다. 궁금한 점이 있으신가요?',
       placeholder: '피지컬 AI 연구에 대해 물어보세요...',
       loading: '답변 생성 중...',
+    },
+    popup: {
+      close: '닫기',
+      dontShowToday: '오늘 하루 보지 않기',
     }
   },
   EN: {
-    siteName: 'SMIC Ansan',
+    siteName: 'SMIC',
     siteSubName: 'Smart Manufacturing Innovation Center',
     nav: {
       home: 'Home',
@@ -75,6 +123,9 @@ export const translations = {
       research: 'Research',
       docs: 'Docs',
       notices: 'Notices',
+      floorplan: 'Floor Plan',
+      visitorNotice: 'Visitor Info',
+      directions: 'Directions',
     },
     hero: {
       badge: 'Future of Manufacturing',
@@ -87,7 +138,7 @@ export const translations = {
     },
     about: {
       subtitle: 'About SMIC',
-      title: 'SMIC Ansan',
+      title: 'SMIC',
       desc: 'A hub for practical technology research solving on-site manufacturing challenges',
       missionTitle: 'Mission',
       missionDesc: 'Enhance the manufacturing competitiveness of domestic SMEs to global levels through the fusion of manufacturing data and AI technology.',
@@ -117,17 +168,62 @@ export const translations = {
       desc: 'Stay updated with SMIC news and events.',
       gallery: 'Activity Gallery',
     },
+    floorplan: {
+      desc: 'You can view detailed information for each floor.',
+      floorList: [
+        { floor: '8F ~ 11F', name: 'Tenant Facilities', color: 'bg-gray-400', hasVideo: false },
+        { floor: '7F', name: 'Education/Seminar', color: 'bg-gray-400', hasVideo: false },
+        { floor: '6F', name: 'Coworking Space', color: 'bg-gray-400', hasVideo: false },
+        { floor: '5F', name: 'SMIC Control Room', color: 'bg-blue-500', hasVideo: true },
+        { floor: '4F', name: 'CO-LAB', color: 'bg-purple-400', hasVideo: true },
+        { floor: '3F', name: 'Demo Factory (U.C.)', color: 'bg-blue-600', hasVideo: true },
+        { floor: '2F', name: 'Data Center', color: 'bg-blue-700', hasVideo: true },
+        { floor: '1F', name: 'Demo Factory', color: 'bg-slate-800', hasVideo: true },
+        { floor: 'B1 ~ B3', name: 'Underground Parking', color: 'bg-gray-400', hasVideo: false },
+      ]
+    },
+    visitorNotice: {
+      title: 'Visitor Information',
+      desc: 'Please apply for a visit during the application period announced through the notice.',
+      steps: [
+        { title: 'Application Period Guide', subtitle: 'Check the application period on the website notice' },
+        { title: 'Visitor Application', subtitle: 'First-come, first-served basis within the announced period', buttonText: 'Apply Now' },
+        { title: 'Result Notification', subtitle: 'Notification of results after the application period ends' },
+        { title: 'Visit Registration', subtitle: '*Only for those who have received confirmation', buttonText: 'Register Visit' },
+        { title: 'Visit Confirmation', subtitle: 'Final confirmation of your visit' },
+        { title: 'Tour Program', subtitle: 'The tour will proceed at the confirmed time' },
+        { title: 'Satisfaction Survey', subtitle: 'Participate in the visitor satisfaction survey', buttonText: 'Join Survey' },
+      ]
+    },
+    directions: {
+      title: 'Directions',
+      desc: 'Directions to SMIC Ansan Center.',
+      tel: "Tel",
+      fax: "Fax",
+      address: {
+        addr1: "17, Haeyang 3-ro, Sangnok-gu, Ansan-si, Gyeonggi-do",
+        addr2: "Digital Transformation Hub, 1st-5th floors",
+        tel: "031-498-7161",
+        fax: "031-498-7114",
+        email: "smic@smic.kr"
+      }
+    },
     footer: {
       desc: 'Global hub for researching AI and Physical AI technologies to enhance the competitiveness of future manufacturing.',
       contact: 'Contact',
       address: '705 Haean-ro, Sangnok-gu, Ansan-si, Gyeonggi-do, SMIC',
       related: 'Related Sites',
       admin: 'Admin Portal',
+      familySite: 'FAMILY SITE',
     },
     assistant: {
       welcome: 'Hello! I am the SMIC AI researcher. How can I help you today?',
       placeholder: 'Ask about Physical AI research...',
       loading: 'Generating response...',
+    },
+    popup: {
+      close: 'Close',
+      dontShowToday: 'Don\'t show today',
     }
   }
 };
