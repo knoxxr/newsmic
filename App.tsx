@@ -359,6 +359,20 @@ const NoticesSection = ({ notices, language, onNoticeClick, onShowGallery }: { n
 };
 
 const NoticeDetail = ({ notice, onBack }: { notice: NoticeItem; onBack: () => void }) => {
+  const [isContentPopupVisible, setIsContentPopupVisible] = useState(false);
+
+  const handleCloseContentPopup = () => {
+    setIsContentPopupVisible(false);
+  };
+
+  useEffect(() => {
+    if (notice.category === '공지') {
+      setIsContentPopupVisible(true);
+    } else {
+      setIsContentPopupVisible(false); // Ensure it's closed if category changes
+    }
+  }, [notice]);
+  
   return (
     <div className="py-20 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:lg-8">
@@ -376,9 +390,29 @@ const NoticeDetail = ({ notice, onBack }: { notice: NoticeItem; onBack: () => vo
             {/* Add more detailed content here if available */}
             <p>자세한 내용은 담당자에게 문의해 주시기 바랍니다.</p>
           </div>
+          {notice.category === '공지' && (
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setIsContentPopupVisible(true)}
+                className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                내용 팝업으로 보기
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
+
+    {isContentPopupVisible && notice.category === '공지' && (
+      <PopupModal
+        title={notice.title}
+        content={notice.content}
+        onClose={handleCloseContentPopup}
+        onDontShowToday={() => handleCloseContentPopup()} // No "Don't show today" persistence for content popups
+        language={"KO"} // Assuming KO for notice content for now, can be made dynamic if needed
+      />
+    )}
   );
 };
 
@@ -1097,25 +1131,7 @@ const App: React.FC = () => {
 
 
 
-    const handleNoticeClick = (notice: NoticeItem) => {
-
-
-
-
-
-      if (notice.category === '공지') {
-
-
-
-
-
-        setPopupNotice(notice);
-
-
-
-
-
-      } else {
+      const handleNoticeClick = (notice: NoticeItem) => {
 
 
 
@@ -1127,13 +1143,7 @@ const App: React.FC = () => {
 
 
 
-      }
-
-
-
-
-
-    };
+      };
 
 
 
