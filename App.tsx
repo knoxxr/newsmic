@@ -254,7 +254,7 @@ const DocsSection = ({ documents, language }: { documents: TechDoc[]; language: 
   };
 
   return (
-    <div className="py-20 bg-slate-50 min-h-[60vh]">
+    <div className="bg-slate-50 min-h-[60vh]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
           <div>
@@ -309,7 +309,7 @@ const NoticesSection = ({ notices, language, onNoticeClick, onShowGallery }: { n
   const viewGalleryText = language === 'KO' ? '갤러리 보러가기 →' : 'View Gallery →';
 
   return (
-    <div className="py-20 bg-white min-h-[60vh]">
+    <div className="bg-white min-h-[60vh]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900">{t.title}</h2>
@@ -1207,7 +1207,7 @@ const App: React.FC = () => {
 
     return (
       <>
-        <div style={{ display: (activeTab !== 'DOCS' && activeTab !== 'NOTICES' && activeTab !== 'ADMIN') ? 'block' : 'none', minHeight: '60vh' }}>
+        <div className="py-20" style={{ display: (activeTab !== 'DOCS' && activeTab !== 'NOTICES' && activeTab !== 'ADMIN') ? 'block' : 'none', minHeight: '60vh' }}>
           {mainPageContent}
         </div>
         
