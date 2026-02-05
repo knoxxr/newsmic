@@ -1,4 +1,4 @@
-export type NavigationItem = 'HOME' | 'ABOUT' | 'RESEARCH' | 'FLOOR_INFO' | 'VISIT_GUIDE' | 'DOCS' | 'NOTICES' | 'CONTACT' | 'ADMIN';
+export type NavigationItem = 'HOME' | 'ABOUT' | 'RESEARCH' | 'FLOORPLAN' | 'VISITORNOTICE' | 'DOCS' | 'NOTICES' | 'DIRECTIONS' | 'ADMIN';
 export type Language = 'KO' | 'EN';
 
 export interface ResearchArea {

@@ -19,9 +19,9 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
     { id: 'HOME', label: t.home },
     { id: 'ABOUT', label: t.about },
     { id: 'RESEARCH', label: t.research },
-    { id: 'FLOOR_INFO', label: t.floorplan },
-    { id: 'VISIT_GUIDE', label: t.visitorNotice },
-    { id: 'CONTACT', label: t.directions },
+    { id: 'FLOORPLAN', label: t.floorplan },
+    { id: 'VISITORNOTICE', label: t.visitorNotice },
+    { id: 'DIRECTIONS', label: t.directions },
   ];
 
   const secondaryNavItems: { id: NavigationItem; label: string }[] = [
