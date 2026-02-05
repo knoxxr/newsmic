@@ -81,7 +81,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
                   onClick={() => handleNavClick(item.id)}
                   className={`px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md ${
                     activeTab === item.id
-                      ? 'bg-brand-100 text-brand-700' // Active state: light blue background, darker blue text
+                      ? 'bg-blue-100 text-brand-700' // Active state: light blue background, darker blue text (using bg-blue-100)
                       : 'bg-brand-600 text-white hover:bg-blue-100 hover:text-slate-900' // Default: blue, white text, hover light blue background, dark text
                   }`}
                 >

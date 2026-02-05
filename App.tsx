@@ -1207,7 +1207,7 @@ const App: React.FC = () => {
 
     return (
       <>
-        <div className="py-20" style={{ display: (activeTab !== 'DOCS' && activeTab !== 'NOTICES' && activeTab !== 'ADMIN') ? 'block' : 'none', minHeight: '60vh' }}>
+        <div style={{ display: (activeTab !== 'DOCS' && activeTab !== 'NOTICES' && activeTab !== 'ADMIN') ? 'block' : 'none', minHeight: '60vh' }}>
           {mainPageContent}
         </div>
         
