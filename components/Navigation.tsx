@@ -82,7 +82,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, langua
                   className={`px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md ${
                     activeTab === item.id
                       ? 'bg-brand-100 text-brand-700' // Active state: light blue background, darker blue text
-                      : 'bg-brand-600 text-white hover:bg-white hover:text-brand-600' // Default: blue, white text, hover inverted
+                      : 'bg-brand-600 text-white hover:bg-blue-100 hover:text-slate-900' // Default: blue, white text, hover light blue background, dark text
                   }`}
                 >
                   {item.label}
