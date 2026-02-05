@@ -1109,19 +1109,43 @@ const App: React.FC = () => {
 
 
 
-      const handleNoticeClick = (notice: NoticeItem) => {
+        const handleNoticeClick = (notice: NoticeItem) => {
 
 
 
 
 
-        setSelectedNotice(notice);
+          if (notice.category === '공지') {
 
 
 
 
 
-      };
+            setPopupNotice(notice); // This will trigger the popup in App.tsx
+
+
+
+
+
+          } else {
+
+
+
+
+
+            setSelectedNotice(notice);
+
+
+
+
+
+          }
+
+
+
+
+
+        };
 
 
 
