@@ -435,6 +435,34 @@ const FloorPlanSection = ({ language }: { language: Language }) => {
   const t = translations[language];
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
+  // 1. 층별 배경색 지정 (8F~11F 색상 복구)
+  const getFloorBgColor = (floor: string) => {
+    if (floor.includes('8F') || floor.includes('11F')) return 'bg-[#D1D1D1]'; // 기업 입주 시설 (연한 회색)
+    if (floor.includes('7F')) return 'bg-[#C0C0C0]'; // 교육/세미나
+    if (floor.includes('6F')) return 'bg-[#A6A6A6]'; // 코워킹 스페이스
+    if (floor.includes('5F')) return 'bg-[#6B84A8]'; // SMIC 운영룸
+    if (floor.includes('4F')) return 'bg-[#98A8C7]'; // CO-LAB
+    if (floor.includes('3F')) return 'bg-[#B1BED8]'; // 데모공장(구축 중)
+    if (floor.includes('2F')) return 'bg-[#3C6EA6]'; // 데이터센터
+    if (floor.includes('1F')) return 'bg-[#303542]'; // 데모공장
+    if (floor.includes('B1') || floor.includes('B3')) return 'bg-[#D1D1D1]'; // 지하주차장
+    return 'bg-slate-500'; // 기본값
+  };
+
+  // 2. 층별 동영상 경로 지정 (1F~5F만 설정, 나머지는 null)
+  const getFloorVideo = (floor: string) => {
+    if (floor.includes('8F') || floor.includes('11F')) return null;
+    
+    if (floor.includes('5F')) return '/5층.mp4';
+    if (floor.includes('4F')) return '/4층.mp4';
+    if (floor.includes('3F')) return '/3층.mp4';
+    if (floor.includes('2F')) return '/2층.mp4';
+    if (floor.includes('1F')) return '/1층.mp4';
+    
+    // 8F, 11F, 6F, 7F, 지하 등은 null 반환 -> 버튼 안 생김
+    return null;
+  };
+
   return (
     <div className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -447,20 +475,34 @@ const FloorPlanSection = ({ language }: { language: Language }) => {
             <img src="/층별안내1.jpg" alt="Building Exterior" className="absolute inset-0 w-full h-full object-cover" />
           </div>
           <div className="w-full lg:w-7/12 flex flex-col bg-white">
-            {t.floorplan.floorList.map((item, index) => (
-              <div key={index} className={`${item.color} flex items-center justify-between px-8 py-5 border-b border-white/10 last:border-0 transition-all hover:brightness-105`}>
-                <div className="flex items-center gap-6">
-                  <span className={`text-2xl font-bold text-white w-24`}>{item.floor}</span>
-                  <span className={`text-lg font-medium text-white`}>{item.name}</span>
+            {t.floorplan.floorList.map((item, index) => {
+              // 각 층에 맞는 비디오 경로 가져오기 (8F, 11F 등은 null이 됨)
+              const videoPath = getFloorVideo(item.floor);
+              
+              return (
+                <div 
+                  key={index} 
+                  className={`${getFloorBgColor(item.floor)} flex items-center justify-between px-8 py-5 border-b border-white/10 last:border-0 transition-all hover:brightness-105`}
+                >
+                  <div className="flex items-center gap-6">
+                    <span className={`text-2xl font-bold text-white w-24`}>{item.floor}</span>
+                    <span className={`text-lg font-medium text-white`}>{item.name}</span>
+                  </div>
+                  
+                  {/* videoPath가 존재하는 경우(1~5층)에만 버튼 표시 */}
+                  {/* 8F, 11F 등은 videoPath가 null이므로 버튼이 렌더링되지 않음 */}
+                  {videoPath && (
+                    <button 
+                      onClick={() => setSelectedVideo(videoPath)} 
+                      className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-1.5 rounded-full text-sm font-semibold backdrop-blur-sm transition-colors border border-white/30"
+                    >
+                      <Play className="w-3 h-3 fill-current" />
+                      {t.floorplan.viewDetailsButton}
+                    </button>
+                  )}
                 </div>
-                {item.hasVideo && (
-                  <button onClick={() => setSelectedVideo(item.video)} className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-1.5 rounded-full text-sm font-semibold backdrop-blur-sm transition-colors border border-white/30">
-                    <Play className="w-3 h-3 fill-current" />
-                    {t.floorplan.viewDetailsButton}
-                  </button>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -539,7 +581,10 @@ const VisitorNoticeSection = ({ language }: { language: Language }) => {
 
 const DirectionsSection = ({ language }: { language: Language }) => {
   const t = translations[language].directions;
-  const mapEmbedUrl = `https://www.google.com/maps/embed?q=${encodeURIComponent(t.address.addr1)}&z=15`;
+  
+  // 수정됨: 경기도 안산시 상록구 해양3로 17 주소 적용
+  const mapAddress = "경기도 안산시 상록구 해양3로 17";
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapAddress)}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <div className="py-20 bg-slate-50">
@@ -556,6 +601,8 @@ const DirectionsSection = ({ language }: { language: Language }) => {
                 <h3 className="text-xl font-bold text-slate-900">{t.addressGuideTitle}</h3>
               </div>
               <div className="space-y-1 mb-8">
+                {/* 주소 텍스트도 요청하신 주소와 일치하는지 확인하거나, locales 파일이 있다면 거기서 수정되어야 합니다.
+                    여기서는 화면에 보이는 텍스트는 locales를 따르되, 지도는 확실하게 변경합니다. */}
                 <p className="text-slate-700 font-medium text-lg">{t.address.addr1}</p>
                 <p className="text-slate-600">{t.address.addr2}</p>
                 <p className="text-blue-500 font-medium mt-2">{t.address.center}</p>
@@ -585,10 +632,10 @@ const DirectionsSection = ({ language }: { language: Language }) => {
               </div>
             </div>
             <div className="flex gap-3 mt-10">
-              <a href={`https://map.kakao.com/link/search/${encodeURIComponent(t.address.addr1)}`} target="_blank" rel="noreferrer" className="flex-1 bg-[#FAE100] hover:bg-[#FCE205] text-slate-900 py-3 rounded-lg font-bold text-sm flex items-center justify-center transition-colors">
+              <a href={`https://map.kakao.com/link/search/${encodeURIComponent(mapAddress)}`} target="_blank" rel="noreferrer" className="flex-1 bg-[#FAE100] hover:bg-[#FCE205] text-slate-900 py-3 rounded-lg font-bold text-sm flex items-center justify-center transition-colors">
                 {t.kakaomap} <ExternalLink className="w-4 h-4 ml-1 opacity-60" />
               </a>
-              <a href={`https://map.naver.com/v5/search/${encodeURIComponent(t.address.addr1)}`} target="_blank" rel="noreferrer" className="flex-1 bg-[#03C75A] hover:bg-[#02B351] text-white py-3 rounded-lg font-bold text-sm flex items-center justify-center transition-colors">
+              <a href={`https://map.naver.com/v5/search/${encodeURIComponent(mapAddress)}`} target="_blank" rel="noreferrer" className="flex-1 bg-[#03C75A] hover:bg-[#02B351] text-white py-3 rounded-lg font-bold text-sm flex items-center justify-center transition-colors">
                 {t.navermap} <ExternalLink className="w-4 h-4 ml-1 opacity-80" />
               </a>
             </div>
