@@ -41,6 +41,11 @@ export const translations = {
       desc: 'SMIC는 단순 자동화를 넘어, 인지하고 판단하는 지능형 제조 시스템을 연구합니다.',
       visualTitle: '데모공장 실시간 가동 현황 (Simulation)',
       visualDesc: 'Industrial AI Model #42 기반 공정 최적화 데이터',
+      platformStatusTitle: 'SMIC 플랫폼 현황',
+      platformStatusDesc: '실시간 수집 중인 장치 및 메시지 전송 현황입니다.',
+      activeDeviceStatusTitle: '활성 장치 현황',
+      messageTransmissionStatusTitle: '메시지 전송 현황',
+      last30Days: '최근 30일',
     },
     docs: {
       title: '기술 문서 및 자료',
@@ -58,6 +63,7 @@ export const translations = {
     },
     floorplan: {
       desc: '각 층별 상세 정보를 확인하실 수 있습니다.',
+      viewDetailsButton: '자세히 보기',
       floorList: [
         { floor: '8F ~ 11F', name: '기업입주 시설', color: 'bg-gray-400', hasVideo: false },
         { floor: '7F', name: '교육/세미나', color: 'bg-gray-400', hasVideo: false },
@@ -85,12 +91,16 @@ export const translations = {
     },
     directions: {
       title: '오시는 길',
-      desc: 'SMIC 안산 센터로 오시는 길 안내입니다.',
+      desc: 'SMIC 디지털전환허브로 오시는 길을 안내해 드립니다.',
+      addressGuideTitle: '주소 안내',
+      kakaomap: '카카오맵',
+      navermap: '네이버 지도',
       tel: "전화",
       fax: "팩스",
       address: {
         addr1: "경기도 안산시 상록구 해양3로 17",
         addr2: "디지털전환 허브 1~5층",
+        center: "스마트제조혁신센터",
         tel: "031-498-7161",
         fax: "031-498-7114",
         email: "smic@smic.kr"
@@ -153,6 +163,11 @@ export const translations = {
       desc: 'SMIC researches intelligent manufacturing systems that perceive and judge, going beyond simple automation.',
       visualTitle: 'Real-time Demo Factory Status (Simulation)',
       visualDesc: 'Process optimization data based on Industrial AI Model #42',
+      platformStatusTitle: 'SMIC Platform Status',
+      platformStatusDesc: 'Status of real-time collected devices and message transmissions.',
+      activeDeviceStatusTitle: 'Active Device Status',
+      messageTransmissionStatusTitle: 'Message Transmission Status',
+      last30Days: 'Last 30 Days',
     },
     docs: {
       title: 'Technical Documents',
@@ -170,6 +185,7 @@ export const translations = {
     },
     floorplan: {
       desc: 'You can view detailed information for each floor.',
+      viewDetailsButton: 'View Details',
       floorList: [
         { floor: '8F ~ 11F', name: 'Tenant Facilities', color: 'bg-gray-400', hasVideo: false },
         { floor: '7F', name: 'Education/Seminar', color: 'bg-gray-400', hasVideo: false },
@@ -197,12 +213,16 @@ export const translations = {
     },
     directions: {
       title: 'Directions',
-      desc: 'Directions to SMIC Ansan Center.',
+      desc: 'We guide you to SMIC Digital Transformation Hub.',
+      addressGuideTitle: 'Address Information',
+      kakaomap: 'Kakao Map',
+      navermap: 'Naver Map',
       tel: "Tel",
       fax: "Fax",
       address: {
         addr1: "17, Haeyang 3-ro, Sangnok-gu, Ansan-si, Gyeonggi-do",
         addr2: "Digital Transformation Hub, 1st-5th floors",
+        center: "Smart Manufacturing Innovation Center",
         tel: "031-498-7161",
         fax: "031-498-7114",
         email: "smic@smic.kr"
