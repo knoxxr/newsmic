@@ -11,6 +11,11 @@ import { ArrowRight, Box, Brain, Cpu, FileText, Factory, ChevronRight, Activity,
 import ActivityChart from './components/ActivityChart';
 import TransportMessagesChart from './components/TransportMessagesChart'; // 추가
 
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/autoplay'; // Autoplay module CSS (if needed)
+
 // --- Image Data ---
 const aboutImages = ['/그림1.jpg', '/그림2.png', '/그림3.png', '/그림4.jpg'];
 
@@ -199,63 +204,96 @@ const ResearchSection = ({ language }: { language: Language }) => {
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">{t.desc}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-6">
+        <Swiper
+          modules={[Autoplay]}
+          spaceBetween={24} // Tailwind CSS gap-6 (24px)
+          slidesPerView={3}
+          loop={true}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          breakpoints={{
+            // when window width is >= 640px
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            // when window width is >= 768px
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+            // when window width is >= 1536px (2xl)
+            1536: {
+              slidesPerView: 3, // Keep 3 for 2xl as per request
+              spaceBetween: 24,
+            }
+          }}
+          className="research-swiper"
+        >
           {areas.map((area, index) => {
             const theme = CARD_THEMES[index % CARD_THEMES.length];
             return (
-              <div key={area.id} className="flex flex-col h-full bg-white rounded-2xl overflow-hidden hover:-translate-y-2 transition-transform duration-300 border border-slate-100 shadow-lg shadow-gray-200">
-                {/* 1. Header (Fixed Height) */}
-                <div className={`${theme.bg} p-6 flex flex-col items-start gap-4 h-40 relative overflow-hidden shrink-0`}>
-                  <div className="absolute -right-4 -bottom-4 opacity-10 transform rotate-12 scale-150">
-                    {renderIcon(area.icon)}
-                  </div>
-                  <div className="z-10 bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                    {renderIcon(area.icon)}
-                  </div>
-                  <h3 className="z-10 text-xl font-bold text-white leading-tight break-keep">
-                    {area.title}
-                  </h3>
-                </div>
-
-                {/* 2. Body */}
-                <div className="p-6 flex-1 flex flex-col">
-                  {/* flex-grow ensures this section pushes the separator and footer to the bottom */}
-                  <div className="flex-grow">
-                    <p className="text-slate-600 text-sm leading-relaxed mb-6 break-keep text-left">
-                      {area.description}
-                    </p>
+              <SwiperSlide key={area.id} className="h-full">
+                <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden transition-transform duration-300 border border-slate-100 shadow-lg shadow-gray-200">
+                  {/* 1. Header (Fixed Height) */}
+                  <div className={`${theme.bg} p-6 flex flex-col items-start gap-4 h-40 relative overflow-hidden shrink-0`}>
+                    <div className="absolute -right-4 -bottom-4 opacity-10 transform rotate-12 scale-150">
+                      {renderIcon(area.icon)}
+                    </div>
+                    <div className="z-10 bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                      {renderIcon(area.icon)}
+                    </div>
+                    <h3 className="z-10 text-xl font-bold text-white leading-tight break-keep">
+                      {area.title}
+                    </h3>
                   </div>
 
-                  {/* 구분선 */}
-                  <div className="w-full h-px bg-slate-100 mb-5"></div>
+                  {/* 2. Body */}
+                  <div className="p-6 flex-1 flex flex-col">
+                    {/* flex-grow ensures this section pushes the separator and footer to the bottom */}
+                    <div className="flex-grow">
+                      <p className="text-slate-600 text-sm leading-relaxed mb-6 break-keep text-left">
+                        {area.description}
+                      </p>
+                    </div>
 
-                  {/* 3. Footer (Details) */}
-                  <div className="space-y-3 shrink-0">
-                    {area.details.map((detail, idx) => {
-                      const parts = detail.split(':');
-                      const label = parts.length > 1 ? parts[0].trim() : '';
-                      const content = parts.length > 1 ? parts.slice(1).join(':').trim() : detail;
-                      const isCore = label.includes('핵심') || label.includes('Core');
+                    {/* 구분선 */}
+                    <div className="w-full h-px bg-slate-100 mb-5"></div>
 
-                      return (
-                        <div key={idx} className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2">
-                            <span className={`text-[11px] font-bold uppercase px-2 py-0.5 rounded-full tracking-wide ${isCore ? 'bg-slate-700 text-white' : `${theme.light} ${theme.text}`}`}>
-                              {label || (isCore ? 'CORE' : 'VALUE')}
-                            </span>
+                    {/* 3. Footer (Details) */}
+                    <div className="space-y-3 shrink-0">
+                      {area.details.map((detail, idx) => {
+                        const parts = detail.split(':');
+                        const label = parts.length > 1 ? parts[0].trim() : '';
+                        const content = parts.length > 1 ? parts.slice(1).join(':').trim() : detail;
+                        const isCore = label.includes('핵심') || label.includes('Core');
+
+                        return (
+                                                  <div key={idx} className="flex flex-col gap-2">
+                                                    <div className="flex items-center gap-2">
+                                                      <span className={`text-xs font-bold uppercase px-2 py-0.5 rounded-full tracking-wide ${isCore ? 'bg-slate-700 text-white' : `${theme.light} ${theme.text}`}`}>
+                                                        {label || (isCore ? 'CORE' : 'VALUE')}
+                                                      </span>
+                                                    </div>
+                                                    <p className="text-sm text-slate-700 font-medium pl-1 leading-snug break-keep">                              {content}
+                            </p>
                           </div>
-                          <p className="text-xs text-slate-700 font-medium pl-1 leading-snug break-keep">
-                            {content}
-                          </p>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </SwiperSlide>
             );
           })}
-        </div>
+        </Swiper>
 
         {/* [추가된 부분] ActivityChart: Research Section 하단에 배치 */}
         {/* SMIC Platform Activity Section */}

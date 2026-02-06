@@ -110,6 +110,7 @@ const TransportMessagesChart = ({ language }: { language: Language }) => {
               fill="#0284c7" // brand-600 (시그니처 블루)
               radius={[2, 2, 0, 0]} 
               barSize={8}
+              animationDuration={1500} // 애니메이션 지속 시간 1.5초
             />
           </BarChart>
         </ResponsiveContainer>

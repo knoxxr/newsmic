@@ -114,6 +114,7 @@ const ActivityChart = ({ language }: { language: Language }) => {
               strokeWidth={3} 
               dot={false} 
               activeDot={{ r: 6, fill: '#0284c7' }}
+              animationDuration={1500} // 애니메이션 지속 시간 1.5초
             />
           </LineChart>
         </ResponsiveContainer>
